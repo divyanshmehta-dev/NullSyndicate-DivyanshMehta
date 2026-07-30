@@ -60,11 +60,11 @@
       --chat-text-user: #000000;
       --chat-text-bot: #f0f6fc;
 
-      /* Map tile filter for dark mode (inverts and adjusts brightness/contrast) */
+      /* Map tile filter for dark mode */
       --map-filter: brightness(0.75) invert(1) contrast(1.1) hue-rotate(200deg);
     }
 
-    /* Reset & Base Layout - Optimized for speed */
+    /* Reset & Base Layout */
     * {
       margin: 0;
       padding: 0;
@@ -93,7 +93,6 @@
       z-index: 1;
     }
 
-    /* Apply global dark/light filter to Leaflet tile container */
     .leaflet-tile-pane {
       filter: var(--map-filter);
       transition: filter 0.3s ease;
@@ -171,7 +170,6 @@
       padding: 0 4px;
     }
 
-    /* Autocomplete Dropdown List */
     .autocomplete-list {
       position: absolute;
       top: calc(100% + 6px);
@@ -218,7 +216,6 @@
       color: var(--text-sub);
     }
 
-    /* Filter Pills Bar */
     .filter-pills {
       display: flex;
       gap: 6px;
@@ -247,7 +244,7 @@
       font-weight: 700;
     }
 
-    /* Header Controls Container (Top Right - Vertical Linear Layout) */
+    /* Header Controls Container (Top Right) */
     .top-right-controls {
       position: absolute;
       top: 16px;
@@ -289,6 +286,12 @@
       border-color: var(--radium-purple);
     }
 
+    .btn-pause {
+      background: var(--radium-cyan);
+      color: #000;
+      border-color: var(--radium-cyan);
+    }
+
     .btn-emergency {
       background: var(--radium-pink);
       color: #fff;
@@ -317,7 +320,6 @@
       white-space: nowrap;
     }
 
-    /* BACK TO MAP FLOATING BUTTON (Bottom Left Overlay) */
     .back-to-map-btn {
       position: fixed;
       bottom: 25px;
@@ -348,7 +350,6 @@
       color: #000;
     }
 
-    /* SLIDE-OVER DETAILS PANEL */
     .slide-over-panel {
       position: fixed;
       top: 0;
@@ -366,7 +367,6 @@
       overflow-y: auto;
       padding: 24px;
       gap: 20px;
-      will-change: right;
     }
 
     .slide-over-panel.active {
@@ -405,7 +405,6 @@
       color: #000;
     }
 
-    /* Location Details Card */
     .details-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -461,7 +460,6 @@
       margin-bottom: 10px;
     }
 
-    /* Subpart Section Styles */
     .subpart-section {
       background: var(--bg-subcard);
       border: 1px dashed var(--accent-active);
@@ -491,6 +489,28 @@
     .subpart-list li {
       margin-bottom: 4px;
     }
+    
+    .menu-link-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+      border: 1px solid var(--accent-active);
+      color: var(--text-main);
+      padding: 10px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .menu-link-btn:hover {
+      background: var(--accent-active);
+      color: #000;
+      box-shadow: var(--glow-active);
+      transform: translateY(-2px);
+    }
 
     .details-extra-info {
       font-size: 13px;
@@ -502,7 +522,6 @@
       margin-top: 10px;
     }
 
-    /* Drawer / Section Styles */
     .drawer-sections {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -521,7 +540,6 @@
       text-transform: uppercase;
     }
 
-    /* Emergency Contact Box Styles */
     .emergency-boxes-container {
       display: flex;
       flex-direction: column;
@@ -565,10 +583,6 @@
       display: flex;
       justify-content: space-between;
       background: transparent;
-      border-left: none;
-      border-right: none;
-      border-top: none;
-      cursor: default;
     }
 
     .info-box ul li:last-child {
@@ -584,7 +598,6 @@
       text-decoration: underline;
     }
 
-    /* Floating Chatbot Widget Styles */
     .chat-widget-toggle {
       position: fixed;
       bottom: 25px;
@@ -718,7 +731,6 @@
       cursor: pointer;
     }
 
-    /* Mobile adjustments */
     @media (max-width: 600px) {
       .top-floating-bar {
         width: calc(100vw - 30px);
@@ -746,26 +758,20 @@
 
   <div class="app-container">
     
-    <!-- FULL SCREEN MAP canvas -->
     <div id="map"></div>
 
-    <!-- BACK TO MAP FLOATING BUTTON (Bottom Left Overlay) -->
     <button class="back-to-map-btn" id="backToMapBtn" onclick="closePanel()">
       <span>🗺️</span> <span id="uiBackToMap">Back to Map</span>
     </button>
 
-    <!-- FLOATING TOP SEARCH BAR & FILTERS OVERLAY -->
     <div class="top-floating-bar">
       <div class="search-input-wrapper">
         <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         <input type="text" id="searchInput" placeholder="Search buildings, labs, landmarks..." autocomplete="off" oninput="handleSearchInput()">
         <button id="clearSearchBtn" class="clear-btn" onclick="clearSearch()" hidden>&times;</button>
-        
-        <!-- Autocomplete Dropdown List -->
         <div id="autocompleteList" class="autocomplete-list"></div>
       </div>
       
-      <!-- Category Filter Pills -->
       <div class="filter-pills" id="filterPills">
         <button class="pill active" data-category="all" onclick="filterCategory('all', event)" id="pillAll">✨ All Places</button>
         <button class="pill" data-category="Academic" onclick="filterCategory('Academic', event)" id="pillAcademic">🎓 Academics</button>
@@ -775,9 +781,7 @@
       </div>
     </div>
 
-    <!-- FLOATING TOP RIGHT ACTIONS (Language Selector -> Dark Mode -> Tour -> Emergency) -->
     <div class="top-right-controls">
-      <!-- Language Dropdown Selector -->
       <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
         <option value="en" selected>🌐 English (Default)</option>
         <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
@@ -793,12 +797,15 @@
       <button class="btn btn-tour" id="tourBtn" onclick="startFreshersTour()">
         <span id="uiTour">🌟 Freshers Tour</span>
       </button>
+      <!-- Pause/Play Tour Button explicitly rendered and wired -->
+      <button class="btn btn-pause" id="pauseTourBtn" onclick="togglePauseTour()" style="display: none;">
+        <span id="uiPausePlay">⏸️ Pause Tour</span>
+      </button>
       <button class="btn btn-emergency" id="emergencyNavBtn" onclick="openEmergencySection()">
         <span id="uiEmergency">🚨 Emergency & Help</span>
       </button>
     </div>
 
-    <!-- SLIDE-OVER DETAIL SHEET -->
     <div class="slide-over-panel" id="detailPanel">
       
       <div class="panel-header">
@@ -806,7 +813,6 @@
         <button class="close-panel-btn" onclick="closePanel()">&times;</button>
       </div>
 
-      <!-- Selected Place Details -->
       <div class="details-card" id="locationDetailsCard">
         <div class="badge-wrapper">
           <span id="placeCategory" class="badge">Select Location</span>
@@ -816,7 +822,6 @@
         <h2 id="placeTitle">Welcome to VIT Bhopal Nav</h2>
         <p id="landmarkText">Click any building or landmark pin on the map to view detailed campus information for freshers.</p>
         
-        <!-- Subpart Section -->
         <div id="subpartContainer" class="subpart-section" style="display: none;">
           <div class="subpart-heading"><span id="uiSubpartHeading">📌 Key Highlights & Details</span></div>
           <ul id="subpartList" class="subpart-list"></ul>
@@ -825,9 +830,13 @@
         <div id="extraDetailsBox" class="details-extra-info" style="display: none;">
           <strong><span id="uiProTip">💡 Pro Tip / Timings:</span> </strong><span id="extraDetailsText"></span>
         </div>
+        
+        <div id="menuLinksContainer" class="subpart-section" style="display: none; background: transparent; border: none; padding: 0; margin-top: 16px;">
+          <div class="subpart-heading">🍽️ Explore Eateries & Menus</div>
+          <div id="menuLinksList" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;"></div>
+        </div>
       </div>
 
-      <!-- Emergency Contacts & Services Section -->
       <div class="drawer-sections" id="emergencySection">
         <h3 class="section-heading" id="uiEmergencyHeading">EMERGENCY CONTACTS & SERVICES</h3>
         
@@ -876,7 +885,6 @@
 
   </div>
 
-  <!-- Floating Campus Location Chatbot Popup -->
   <button class="chat-widget-toggle" onclick="toggleChatbot()" title="Campus Assistant">🤖</button>
   <div class="chat-container-popup" id="chatPopup">
     <div class="chat-header">
@@ -897,12 +905,11 @@
 
   <!-- Application Logic Script -->
   <script>
-    // Dictionary for Multilingual Support
     const translations = {
       en: {
         searchPlaceholder: "Search buildings, labs, landmarks (e.g. AB 1, Special Block)...",
         allPlaces: "✨ All Places", academics: "🎓 Academics", facilities: "🏢 Facilities", food: "🍕 Food & Hubs", hostels: "🏠 Hostels",
-        lightMode: "☀️ Light Mode", darkMode: "🌙 Dark Mode", tour: "🌟 Freshers Tour", emergency: "🚨 Emergency & Help", backToMap: "Back to Map",
+        lightMode: "☀️ Light Mode", darkMode: "🌙 Dark Mode", tour: "🌟 Freshers Tour", pauseTour: "⏸️ Pause Tour", resumeTour: "▶️ Resume Tour", emergency: "🚨 Emergency & Help", backToMap: "Back to Map",
         detailsTitle: "🎓 Campus Location Details", selectLocBadge: "Select Location",
         welcomeTitle: "Welcome to VIT Bhopal Nav", welcomeDesc: "The map view has been adjusted to display all campus locations simultaneously. Click any marker to view specific details.",
         proTip: "💡 Pro Tip / Timings:", subpartHeading: "📌 Key Highlights & Details",
@@ -915,7 +922,7 @@
       hi: {
         searchPlaceholder: "भवन, लैब या स्थान खोजें (जैसे AB 1, Special Block)...",
         allPlaces: "✨ सभी स्थान", academics: "🎓 शिक्षा", facilities: "🏢 सुविधाएँ", food: "🍕 खान-पान", hostels: "🏠 हॉस्टल",
-        lightMode: "☀️ लाइट मोड", darkMode: "🌙 डार्क मोड", tour: "🌟 फ्रेशर्स टूर", emergency: "🚨 आपातकालीन सहायता", backToMap: "मैप पर वापस जाएं",
+        lightMode: "☀️ लाइट मोड", darkMode: "🌙 डार्क मोड", tour: "🌟 फ्रेशर्स टूर", pauseTour: "⏸️ टूर रोकें", resumeTour: "▶️ टूर जारी रखें", emergency: "🚨 आपातकालीन सहायता", backToMap: "मैप पर वापस जाएं",
         detailsTitle: "🎓 कैंपस स्थान विवरण", selectLocBadge: "स्थान चुनें",
         welcomeTitle: "VIT भोपाल नव में आपका स्वागत है", welcomeDesc: "सभी कैंपस स्थानों को एक साथ दिखाने के लिए मैप व्यू को समायोजित किया गया है। विवरण देखने के लिए किसी भी पिन पर क्लिक करें।",
         proTip: "💡 प्रो टिप / समय:", subpartHeading: "📌 मुख्य विशेषताएँ और विवरण",
@@ -928,7 +935,7 @@
       es: {
         searchPlaceholder: "Buscar edificios, laboratorios, lugares...",
         allPlaces: "✨ Todos", academics: "🎓 Académicos", facilities: "🏢 Instalaciones", food: "🍕 Comida", hostels: "🏠 Hostales",
-        lightMode: "☀️ Modo Claro", darkMode: "🌙 Modo Oscuro", tour: "🌟 Tour de Novatos", emergency: "🚨 Emergencia y Ayuda", backToMap: "Volver al Mapa",
+        lightMode: "☀️ Modo Claro", darkMode: "🌙 Modo Oscuro", tour: "🌟 Tour de Novatos", pauseTour: "⏸️ Pausar Tour", resumeTour: "▶️ Reanudar Tour", emergency: "🚨 Emergencia y Ayuda", backToMap: "Volver al Mapa",
         detailsTitle: "🎓 Detalles de la Ubicación", selectLocBadge: "Seleccionar Ubicación",
         welcomeTitle: "Bienvenido a VIT Bhopal Nav", welcomeDesc: "La vista del mapa se ha ajustado para mostrar todas las ubicaciones simultáneamente.",
         proTip: "💡 Consejo / Horarios:", subpartHeading: "📌 Puntos Clave y Detalles",
@@ -941,7 +948,7 @@
       ur: {
         searchPlaceholder: "عمارتیں، لیبز تلاش کریں...",
         allPlaces: "✨ تمام مقامات", academics: "🎓 تعلیمی", facilities: "🏢 سہولیات", food: "🍕 کھانا", hostels: "🏠 ہاسٹل",
-        lightMode: "☀️ لائٹ موڈ", darkMode: "🌙 ڈارک موڈ", tour: "🌟 فریشرز ٹور", emergency: "🚨 ہنگامی مدد", backToMap: "نقشے پر واپس",
+        lightMode: "☀️ لائٹ موڈ", darkMode: "🌙 ڈارک موڈ", tour: "🌟 فریشرز ٹور", pauseTour: "⏸️ ٹور روکیں", resumeTour: "▶️ ٹور جاری رکھیں", emergency: "🚨 ہنگامی مدد", backToMap: "نقشے پر واپس",
         detailsTitle: "🎓 کیمپس کی تفصیلات", selectLocBadge: "مقام منتخب کریں",
         welcomeTitle: "VIT بھوپال ناو میں خوش آمدید", welcomeDesc: "تمام مقامات کو ایک ساتھ دکھانے کے لیے نقشے کا منظر ایڈجسٹ کر دیا گیا ہے۔",
         proTip: "💡 ٹپ / اوقات:", subpartHeading: "📌 اہم جھلکیاں اور تفصیلات",
@@ -954,7 +961,7 @@
       kn: {
         searchPlaceholder: "buildings, labs ಹುಡುಕಿ...",
         allPlaces: "✨ ಎಲ್ಲಾ ಸ್ಥಳಗಳು", academics: "🎓 ಶಿಕ್ಷಣ", facilities: "🏢 ಸೌಲಭ್ಯಗಳು", food: "🍕 ಆಹಾರ", hostels: "🏠 ಹಾಸ್ಟೆಲ್",
-        lightMode: "☀️ ಲೈಟ್ ಮೋಡ್", darkMode: "🌙 ಡಾರ್ಕ್ ಮೋಡ್", tour: "🌟 ಪ್ರೆಶರ್ಸ್ ಟೂರ್", emergency: "🚨 ತುರ್ತು ಮತ್ತು ಸಹಾಯ", backToMap: "ನಕ್ಷೆಗೆ ಹಿಂತಿರುಗಿ",
+        lightMode: "☀️ ಲೈಟ್ ಮೋಡ್", darkMode: "🌙 ಡಾರ್ಕ್ ಮೋಡ್", tour: "🌟 ಪ್ರೆಶರ್ಸ್ ಟೂರ್", pauseTour: "⏸️ ಪ್ರವಾಸ ವಿರಾಮಗೊಳಿಸಿ", resumeTour: "▶️ ಪ್ರವಾಸ ಪುನರಾರಂಭಿಸಿ", emergency: "🚨 ತುರ್ತು ಮತ್ತು ಸಹಾಯ", backToMap: "ನಕ್ಷೆಗೆ ಹಿಂತಿರುಗಿ",
         detailsTitle: "🎓 ಕ್ಯಾಂಪಸ್ ಸ್ಥಳದ ವಿವರಗಳು", selectLocBadge: "ಸ್ಥಳವನ್ನು ಆಯ್ಕೆಮಾಡಿ",
         welcomeTitle: "VIT ಭೋಪಾಲ್ ನೇವ್‌ಗೆ ಸ್ವಾಗತ", welcomeDesc: "ಎಲ್ಲಾ ಸ್ಥಳಗಳನ್ನು ಏಕಕಾಲದಲ್ಲಿ ತೋರಿಸಲು ನಕ್ಷೆಯ ವೀಕ್ಷಣೆಯನ್ನು ಹೊಂದಿಸಲಾಗಿದೆ.",
         proTip: "💡 ಪ್ರೊ ಟಿಪ್ / ಸಮಯ:", subpartHeading: "📌 ಪ್ರಮುಖ ಮುಖ್ಯಾಂಶಗಳು",
@@ -967,7 +974,7 @@
       ta: {
         searchPlaceholder: "ህንடங்கள், ஆய்வகங்களைத் தேடுங்கள்...",
         allPlaces: "✨ அனைத்து இடங்கள்", academics: "🎓 கல்வி", facilities: "🏢 வசதிகள்", food: "🍕 உணவு", hostels: "🏠 விடுதிகள்",
-        lightMode: "☀️ வெளிச்ச முறை", darkMode: "🌙 இருண்ட முறை", tour: "🌟 புதியவர்கள் சுற்றுலா", emergency: "🚨 அவசர உதவி", backToMap: "வரைபடத்திற்குத் திரும்பு",
+        lightMode: "☀️ வெளிச்ச முறை", darkMode: "🌙 இருண்ட முறை", tour: "🌟 புதியவர்கள் சுற்றுலா", pauseTour: "⏸️ சுற்றுப்பயணத்தை இடைநிறுத்து", resumeTour: "▶️ சுற்றுப்பயணத்தைத் தொடர்", emergency: "🚨 அவசர உதவி", backToMap: "வரைபடத்திற்குத் திரும்பு",
         detailsTitle: "🎓 வளாக இட விவரங்கள்", selectLocBadge: "இடத்தைத் தேர்ந்தெடுக்கவும்",
         welcomeTitle: "VIT Bhopal Nav-க்கு வரவேற்கிறோம்", welcomeDesc: "அனைத்து இடங்களையும் ஒரே பார்வையில் காட்ட வரைபடக் காட்சி சரிசெய்யப்பட்டுள்ளது.",
         proTip: "💡 குறிப்பு / நேரங்கள்:", subpartHeading: "📌 முக்கிய குறிப்புகள்",
@@ -980,7 +987,7 @@
       ne: {
         searchPlaceholder: "भवनहरू, ल्याबहरू खोज्नुहोस्...",
         allPlaces: "✨ सबै स्थानहरू", academics: "🎓 शैक्षिक", facilities: "🏢 सुविधाहरू", food: "🍕 खाना", hostels: "🏠 होस्टेल",
-        lightMode: "☀️ लाइट मोड", darkMode: "🌙 डार्क मोड", tour: "🌟 फ्रेशर्स टुर", emergency: "🚨 आपतकालीन सहयोग", backToMap: "म्यापमा फर्कनुहोस्",
+        lightMode: "☀️ लाइट मोड", darkMode: "🌙 डार्क मोड", tour: "🌟 फ्रेशर्स टुर", pauseTour: "⏸️ टुर पज गर्नुहोस्", resumeTour: "▶️ टुर पुन: सुरु गर्नुहोस्", emergency: "🚨 आपतकालीन सहयोग", backToMap: "म्यापमा फर्कनुहोस्",
         detailsTitle: "🎓 क्याम्पस स्थान विवरण", selectLocBadge: "स्थान चयन गर्नुहोस्",
         welcomeTitle: "VIT Bhopal Nav मा स्वागत छ", welcomeDesc: "सबै क्याम्पस स्थानहरू एकै नजरमा देखाउन नक्सा दृश्य समायोजन गरिएको छ।",
         proTip: "💡 प्रो टिप / समय:", subpartHeading: "📌 मुख्य विशेषताहरू",
@@ -993,7 +1000,7 @@
       ar: {
         searchPlaceholder: "البحث عن المباني والمختبرات...",
         allPlaces: "✨ كل الأماكن", academics: "🎓 أكاديميون", facilities: "🏢 مرافق", food: "🍕 طعام", hostels: "🏠 سكن",
-        lightMode: "☀️ الوضع الفاتح", darkMode: "🌙 الوضع المظلم", tour: "🌟 جولة الجدد", emergency: "🚨 طوارئ ومساعدة", backToMap: "العودة للخريطة",
+        lightMode: "☀️ الوضع الفاتح", darkMode: "🌙 الوضع المظلم", tour: "🌟 جولة الجدد", pauseTour: "⏸️ إيقاف مؤقت", resumeTour: "▶️ استئناف الجولة", emergency: "🚨 طوارئ ومساعدة", backToMap: "العودة للخريطة",
         detailsTitle: "🎓 تفاصيل الموقع", selectLocBadge: "حدد الموقع",
         welcomeTitle: "مرحباً بك في VIT Bhopal Nav", welcomeDesc: "تم ضبط عرض الخريطة لتظهر جميع مواقع الحرم الجامعي في عرض واحد.",
         proTip: "💡 نصيحة / مواعيد:", subpartHeading: "📌 النقاط الرئيسية والتفاصيل",
@@ -1020,6 +1027,12 @@
 
       document.getElementById('themeBtn').innerText = document.body.classList.contains('dark-mode') ? t.darkMode : t.lightMode;
       document.getElementById('uiTour').innerText = t.tour;
+      
+      const pauseBtn = document.getElementById('pauseTourBtn');
+      if (pauseBtn.style.display !== 'none') {
+        pauseBtn.innerHTML = `<span>${tourPaused ? t.resumeTour : t.pauseTour}</span>`;
+      }
+
       document.getElementById('uiEmergency').innerText = t.emergency;
       document.getElementById('uiBackToMap').innerText = t.backToMap;
 
@@ -1046,7 +1059,6 @@
       document.getElementById('chatInput').placeholder = t.chatPlaceholder;
     }
 
-    // Theme Toggle
     function toggleTheme() {
       const body = document.body;
       const themeBtn = document.getElementById('themeBtn');
@@ -1060,46 +1072,98 @@
       }
     }
 
-    // Accelerated & Optimized Freshers Tour Trigger without popping up the detail panel/drawer
+    // Freshers Tour State Variables with Pause/Play Integration
+    let tourActive = false;
+    let tourPaused = false;
+    let tourIndex = 0;
+    let tourTimeout = null;
+    const tourLocations = [
+      'gate_2', 
+      'lab_complex', 
+      'architecture', 
+      'ab1', 
+      'ab2', 
+      'mph_lion_pharmacy', 
+      'special_block', 
+      'open_auditorium', 
+      'parcel_pickup', 
+      'cricket_ground', 
+      'football_ground', 
+      'boys_hostel_1', 
+      'girls_hostel'
+    ];
+
     function startFreshersTour() {
-      const tourLocations = [
-        'gate_2', 
-        'lab_complex', 
-        'architecture', 
-        'ab1', 
-        'ab2', 
-        'mph_lion_pharmacy', 
-        'special_block', 
-        'open_auditorium', 
-        'parcel_pickup', 
-        'cricket_ground', 
-        'football_ground', 
-        'boys_hostel_1', 
-        'girls_hostel'
-      ];
-      let idx = 0;
+      const pauseBtn = document.getElementById('pauseTourBtn');
+      const t = translations[currentLang];
       
-      const nextStop = () => {
-        if (idx < tourLocations.length) {
-          flyToTourLocation(tourLocations[idx]);
-          idx++;
-          setTimeout(nextStop, 2200); // Accelerated transition timing
-        }
-      };
-      nextStop();
+      if (tourActive && !tourPaused) return;
+
+      if (!tourActive) {
+        tourIndex = 0;
+        tourActive = true;
+        tourPaused = false;
+        pauseBtn.style.display = 'flex';
+        pauseBtn.innerHTML = `<span>${t.pauseTour}</span>`;
+      } else if (tourPaused) {
+        tourPaused = false;
+        pauseBtn.innerHTML = `<span>${t.pauseTour}</span>`;
+        nextTourStop();
+        return;
+      }
+
+      nextTourStop();
     }
 
+    function nextTourStop() {
+      if (!tourActive || tourPaused) return;
+
+      if (tourIndex < tourLocations.length) {
+        flyToTourLocation(tourLocations[tourIndex]);
+        tourIndex++;
+        tourTimeout = setTimeout(nextTourStop, 5000); // 5 seconds per stop
+      } else {
+        stopFreshersTour();
+      }
+    }
+
+    function togglePauseTour() {
+      const pauseBtn = document.getElementById('pauseTourBtn');
+      const t = translations[currentLang];
+      if (!tourActive) return;
+
+      if (!tourPaused) {
+        tourPaused = true;
+        clearTimeout(tourTimeout);
+        pauseBtn.innerHTML = `<span>${t.resumeTour}</span>`;
+      } else {
+        tourPaused = false;
+        pauseBtn.innerHTML = `<span>${t.pauseTour}</span>`;
+        nextTourStop();
+      }
+    }
+
+    function stopFreshersTour() {
+      tourActive = false;
+      tourPaused = false;
+      clearTimeout(tourTimeout);
+      const pauseBtn = document.getElementById('pauseTourBtn');
+      if (pauseBtn) pauseBtn.style.display = 'none';
+    }
+
+    // Updated flyToTourLocation function: hides description box during tour while keeping manual marker clicks functional
     function flyToTourLocation(id) {
       const target = campusData.find(p => p.id === id);
       if (target) {
         map.setView([target.lat, target.lng], 17, { animate: true });
         if (markerMap[target.id]) {
+          closePanel();
           markerMap[target.id].openPopup();
         }
+        // selectPlace(target) is omitted here so the side panel doesn't pop up during the tour sequence
       }
     }
 
-    // Slide Panel Controls
     function openPanel() {
       const panel = document.getElementById('detailPanel');
       const backBtn = document.getElementById('backToMapBtn');
@@ -1129,7 +1193,6 @@
       emergencySec.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // SVG Icon Definitions
     const iconsSVG = {
       book: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`,
       food: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`,
@@ -1316,6 +1379,11 @@
           "Central hub for student club meetings, informal discussions, and hangouts.",
           "Features a vibrant food court with multiple snack joints and eateries.",
           "Incorporates a dedicated section supporting multi-purpose student facilities."
+        ],
+        menuLinks: [
+          { name: "Mayuri Cafe", url: "https://go.fliplink.me/view/57197173-18DF-42DC-9AC2-25BD765F7621" },
+          { name: "AB Dakshin", url: "https://go.fliplink.me/view/CAF9113D-A7CE-4D3D-A8B6-3B32697C6B88" },
+          { name: "Bistro", url: "https://go.fliplink.me/view/4022D0B1-1301-4B51-822A-A594185F3182" }
         ],
         extraInfo: "Popular food joints include cafes and juice bars. Peak crowding occurs right after afternoon lecture hours.",
         hostelWalkTime: "3 min", 
@@ -1512,7 +1580,6 @@
       document.getElementById('placeTitle').innerText = place.name;
       document.getElementById('landmarkText').innerText = place.landmark;
 
-      // Handle Subpart Section
       const subpartContainer = document.getElementById('subpartContainer');
       const subpartList = document.getElementById('subpartList');
       subpartList.innerHTML = '';
@@ -1535,6 +1602,24 @@
         extraBox.style.display = 'block';
       } else {
         extraBox.style.display = 'none';
+      }
+      
+      const menuLinksContainer = document.getElementById('menuLinksContainer');
+      const menuLinksList = document.getElementById('menuLinksList');
+      menuLinksList.innerHTML = '';
+
+      if (place.menuLinks && place.menuLinks.length > 0) {
+        place.menuLinks.forEach(link => {
+          const a = document.createElement('a');
+          a.href = link.url;
+          a.target = "_blank";
+          a.className = "menu-link-btn";
+          a.innerText = "👉 " + link.name;
+          menuLinksList.appendChild(a);
+        });
+        menuLinksContainer.style.display = 'block';
+      } else {
+        menuLinksContainer.style.display = 'none';
       }
 
       const walkTimeBadge = document.getElementById('walkTimeBadge');
@@ -1698,7 +1783,6 @@
       return responseStr;
     }
 
-    // Initial Load Setup - Fit all locations in view and update description box welcome text
     renderMarkers(campusData, true);
   </script>
 </body>
