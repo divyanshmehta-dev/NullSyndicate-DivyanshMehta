@@ -4,13 +4,13 @@
 **Smart Campus Navigation System for VIT Bhopal**
 
 ## Problem
-Large university campuses like VIT Bhopal spread academic blocks, hostels, sports facilities, food courts, and amenities across a wide area. New students, freshers, visitors, and even guests often struggle to:
+Large university campuses like VIT Bhopal have widely spread academic blocks, hostels, sports facilities, food courts, and amenities and this is the main reason why new students, freshers, visitors and even guests often struggle to:
 
-- Locate specific buildings, departments, or facilities quickly.
-- Estimate walking time between their current location (e.g., hostel) and their destination.
-- Get quick answers to simple campus-related queries (e.g., "where is the nearest food court?") without searching through multiple sources or asking around.
+- Locate specific buildings, departments or facilities quickly.
+- Estimate walking time between their current location and their destination.
+- Get quick answers to simple campus-related queries without searching through multiple sources or asking around.
 
-Existing solutions like Google Maps are not tailored to a campus environment — they don't show internal landmarks, walking times between specific campus points, or categorized facilities relevant to student life.
+Existing solutions like Google Maps are not tailored to a campus environment — they don't show internal landmarks, walking times between specific campus points or categorized facilities relevant to student life.
 
 ## Proposed Solution
 We built a **Smart Campus Navigator** — a lightweight, browser-based web application that provides:
