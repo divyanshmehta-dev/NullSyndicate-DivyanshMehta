@@ -40,9 +40,11 @@ An interactive, single-page web app that helps students and visitors navigate th
 
 | Role | Name |
 |------|------|
-| Team Lead | *(add name)* |
-| Member | *(add name)* |
-| Member | *(add name)* |
+| Team Lead | Divyansh Mehta|
+| Member | Aryan Uday Kansagara |
+| Member | Abhinav Jain |
+| Member | Bhavya Vyas |
+
 
 ## 📌 Status
 
