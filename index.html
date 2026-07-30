@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -461,6 +461,37 @@
       margin-bottom: 10px;
     }
 
+    /* Subpart Section Styles */
+    .subpart-section {
+      background: var(--bg-subcard);
+      border: 1px dashed var(--accent-active);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+
+    .subpart-heading {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-active);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .subpart-list {
+      list-style-type: disc;
+      padding-left: 18px;
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    .subpart-list li {
+      margin-bottom: 4px;
+    }
+
     .details-extra-info {
       font-size: 13px;
       color: var(--text-main);
@@ -471,7 +502,7 @@
       margin-top: 10px;
     }
 
-    /* Drawer / Accordion Section Styles */
+    /* Drawer / Section Styles */
     .drawer-sections {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -488,83 +519,6 @@
       letter-spacing: 0.5px;
       color: var(--text-sub);
       text-transform: uppercase;
-    }
-
-    .accordion-item {
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      overflow: hidden;
-      background: var(--bg-subcard);
-    }
-
-    .accordion-header {
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .accordion-header h4 {
-      flex-grow: 1;
-      font-size: 13px;
-      color: var(--text-main);
-    }
-
-    .badge-count {
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 10px;
-      background: var(--bg-primary);
-      color: var(--accent-active);
-      border: 1px solid var(--accent-active);
-    }
-
-    .chevron {
-      font-size: 10px;
-      color: var(--text-sub);
-      transition: transform 0.2s ease;
-    }
-
-    .accordion-item.expanded .chevron {
-      transform: rotate(180deg);
-    }
-
-    .accordion-body {
-      display: none;
-      padding: 10px 14px;
-      border-top: 1px solid var(--border-color);
-      background: var(--bg-card);
-    }
-
-    .accordion-item.expanded .accordion-body {
-      display: block;
-    }
-
-    .subpart-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .subpart-list li {
-      font-size: 12px;
-      color: var(--text-sub);
-      padding: 6px 10px;
-      border-radius: 6px;
-      background: var(--bg-subcard);
-      border: 1px solid var(--border-color);
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .subpart-list li:hover {
-      color: var(--accent-active);
-      border-color: var(--accent-active);
     }
 
     /* Emergency Contact Box Styles */
@@ -630,71 +584,46 @@
       text-decoration: underline;
     }
 
-    /* Chatbot Floating Widget Toggle */
+    /* Floating Chatbot Widget Styles */
     .chat-widget-toggle {
       position: fixed;
       bottom: 25px;
       right: 25px;
-      width: 68px;
-      height: 68px;
-      border: none;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #00f0ff, #00ff66);
+      background: var(--accent-active);
+      color: #000;
+      border: none;
+      box-shadow: var(--glow-active);
       cursor: pointer;
+      z-index: 3000;
       display: flex;
-      justify-content: center;
       align-items: center;
-      font-size: 30px;
-      box-shadow: 0 0 25px rgba(0, 255, 255, .55);
-      z-index: 5000;
-      transition: .3s;
-      overflow: hidden;
+      justify-content: center;
+      font-size: 24px;
     }
 
     .chat-widget-toggle:hover {
-      transform: scale(1.08);
+      transform: scale(1.05);
     }
 
-    .robot-face {
-      position: relative;
-      z-index: 2;
-    }
-
-    .chat-ping {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: rgba(0, 255, 255, .25);
-      animation: ping 2s infinite;
-    }
-
-    @keyframes ping {
-      0% {
-        transform: scale(1);
-        opacity: .8;
-      }
-      100% {
-        transform: scale(1.8);
-        opacity: 0;
-      }
-    }
-
-    /* Chat Popup Window */
     .chat-container-popup {
       position: fixed;
+      bottom: 90px;
       right: 25px;
-      bottom: 105px;
-      width: 390px;
-      height: 560px;
+      width: 360px;
+      max-width: 90vw;
+      height: 480px;
+      max-height: 80vh;
       background: var(--chat-bg);
-      border-radius: 18px;
+      border: 2px solid var(--accent-active);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5), var(--glow-active);
+      z-index: 3000;
       display: none;
       flex-direction: column;
       overflow: hidden;
-      border: 2px solid var(--accent-active);
-      box-shadow: 0 15px 45px rgba(0, 0, 0, .45);
-      z-index: 5000;
     }
 
     .chat-container-popup.active {
@@ -702,12 +631,20 @@
     }
 
     .chat-header {
-      padding: 16px;
+      background: var(--bg-subcard);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: var(--bg-subcard);
-      border-bottom: 1px solid var(--border-color);
+    }
+
+    .chat-header h3 {
+      font-size: 14px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .chat-header .close-chat {
@@ -718,46 +655,20 @@
       cursor: pointer;
     }
 
-    .assistant-info {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .assistant-avatar {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      background: linear-gradient(135deg, #00f0ff, #00ff66);
-    }
-
-    .status-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: #00ff66;
-      border-radius: 50%;
-      margin-right: 4px;
-    }
-
     .chat-messages {
       flex: 1;
-      padding: 15px;
+      padding: 14px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .chat-msg {
       max-width: 85%;
-      padding: 10px 14px;
+      padding: 8px 12px;
       border-radius: 12px;
-      font-size: 13px;
+      font-size: 12px;
       line-height: 1.4;
       word-wrap: break-word;
     }
@@ -778,54 +689,30 @@
       font-weight: 600;
     }
 
-    .welcome-card {
-      padding: 16px;
-      border-radius: 15px;
-      background: var(--bg-subcard);
-    }
-
-    .quick-actions {
-      margin-top: 15px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .quick-actions button {
-      padding: 8px 12px;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      background: var(--accent-active);
-      font-size: 12px;
-      font-weight: bold;
-      color: black;
-    }
-
     .chat-input-area {
-      padding: 12px;
+      padding: 10px;
       border-top: 1px solid var(--border-color);
       background: var(--bg-subcard);
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }
 
     .chat-input-area input {
       flex: 1;
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      padding: 10px 12px;
+      padding: 8px 10px;
       border-radius: 8px;
       color: var(--text-main);
       outline: none;
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .chat-input-area button {
       background: var(--accent-active);
       color: #000;
       border: none;
-      padding: 0 16px;
+      padding: 0 14px;
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
@@ -851,11 +738,6 @@
       }
       .slide-over-panel {
         width: 100vw;
-      }
-      .chat-container-popup {
-        width: calc(100vw - 30px);
-        right: 15px;
-        bottom: 95px;
       }
     }
   </style>
@@ -933,52 +815,15 @@
         </div>
         <h2 id="placeTitle">Welcome to VIT Bhopal Nav</h2>
         <p id="landmarkText">Click any building or landmark pin on the map to view detailed campus information for freshers.</p>
+        
+        <!-- Subpart Section -->
+        <div id="subpartContainer" class="subpart-section" style="display: none;">
+          <div class="subpart-heading"><span id="uiSubpartHeading">📌 Key Highlights & Details</span></div>
+          <ul id="subpartList" class="subpart-list"></ul>
+        </div>
+
         <div id="extraDetailsBox" class="details-extra-info" style="display: none;">
           <strong><span id="uiProTip">💡 Pro Tip / Timings:</span> </strong><span id="extraDetailsText"></span>
-        </div>
-      </div>
-
-      <!-- Accordion Sub-Parts Section -->
-      <div class="drawer-sections" id="subpartsSectionContainer">
-        <h3 class="section-heading" id="uiSubpartsHeading">EXPLORE SUB-PARTS & ROOMS</h3>
-
-        <!-- Section 1: Academics -->
-        <div class="accordion-item expanded" id="secAcademics">
-          <div class="accordion-header" onclick="toggleAccordion('secAcademics')">
-            <span>🎓</span>
-            <h4 id="uiSec1Title">1. Academics & Departments</h4>
-            <span class="badge-count" id="uiSec1Count">5 Sub-parts</span>
-            <span class="chevron">▼</span>
-          </div>
-          <div class="accordion-body">
-            <ul class="subpart-list">
-              <li onclick="selectFromAutocomplete('ab1')">AB-1 Ground Floor Admin & IT Block (AB213) 📍</li>
-              <li onclick="selectFromAutocomplete('ab1')">Central Library & COE Cabin 📍</li>
-              <li onclick="selectFromAutocomplete('ab2')">AB-2 Lecture Halls & Faculty Cabins 📍</li>
-              <li onclick="selectFromAutocomplete('lab_complex')">Lab Complex & Interview Rooms 📍</li>
-              <li onclick="selectFromAutocomplete('architecture')">School of Architecture Studio 📍</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Section 2: Facilities -->
-        <div class="accordion-item" id="secFacilities">
-          <div class="accordion-header" onclick="toggleAccordion('secFacilities')">
-            <span>🏢</span>
-            <h4 id="uiSec2Title">2. Amenities & Guidance</h4>
-            <span class="badge-count" id="uiSec2Count">6 Amenities</span>
-            <span class="chevron">▼</span>
-          </div>
-          <div class="accordion-body">
-            <ul class="subpart-list">
-              <li onclick="selectFromAutocomplete('special_block')">Special Block & Food Court 📍</li>
-              <li onclick="selectFromAutocomplete('mph_lion_pharmacy')">MPH, Medical Center & Indoor Games 📍</li>
-              <li onclick="selectFromAutocomplete('parcel_pickup')">Parcel Pickup Hub (Amazon, Flipkart) 📍</li>
-              <li onclick="selectFromAutocomplete('open_auditorium')">Open Auditorium (Ganesh Chaturthi, Parties) 📍</li>
-              <li onclick="selectFromAutocomplete('gate_2')">VIT Main Gate 1 📍</li>
-              <li onclick="selectFromAutocomplete('gate_1')">VIT Main Gate 2 📍</li>
-            </ul>
-          </div>
         </div>
       </div>
 
@@ -1031,44 +876,19 @@
 
   </div>
 
-  <!-- Campus Assistant V2 UI -->
-  <button id="chatToggle" class="chat-widget-toggle" onclick="toggleChatbot()">
-    <span class="robot-face">🤖</span>
-    <span class="chat-ping"></span>
-  </button>
-
+  <!-- Floating Campus Location Chatbot Popup -->
+  <button class="chat-widget-toggle" onclick="toggleChatbot()" title="Campus Assistant">🤖</button>
   <div class="chat-container-popup" id="chatPopup">
     <div class="chat-header">
-      <div class="assistant-info">
-        <div class="assistant-avatar">🤖</div>
-        <div>
-          <h3 id="uiChatTitle">Campus Assistant</h3>
-          <small>
-            <span class="status-dot"></span> Online
-          </small>
-        </div>
-      </div>
+      <h3 id="uiChatTitle">🤖 Location Assistant</h3>
       <button class="close-chat" onclick="toggleChatbot()">✕</button>
     </div>
-
-    <div id="chatMessages" class="chat-messages">
-      <div class="welcome-card">
-        <h2>👋 Welcome!</h2>
-        <p id="uiChatWelcome">I'm your Smart Campus Assistant. Ask me anything about the campus.</p>
-        <div class="quick-actions">
-          <button onclick="quickAsk('Library')">📚 Library</button>
-          <button onclick="quickAsk('Food')">🍕 Food</button>
-          <button onclick="quickAsk('Hostels')">🏠 Hostels</button>
-          <button onclick="quickAsk('Medical')">🚑 Medical</button>
-          <button onclick="quickAsk('AB1')">🎓 AB1</button>
-          <button onclick="quickAsk('Campus Tour')">🧭 Tour</button>
-        </div>
-      </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg bot" id="uiChatWelcome">Hello! Ask me about any building or facility on campus!</div>
     </div>
-
     <div class="chat-input-area">
-      <input id="chatInput" type="text" placeholder="Ask me anything..." onkeypress="handleChatKeyPress(event)">
-      <button id="sendBtn" onclick="sendChatMessage()">➤</button>
+      <input type="text" id="chatInput" placeholder="Ask place..." onkeypress="handleChatKeyPress(event)">
+      <button onclick="sendChatMessage()" id="uiChatSend">Send</button>
     </div>
   </div>
 
@@ -1084,104 +904,104 @@
         allPlaces: "✨ All Places", academics: "🎓 Academics", facilities: "🏢 Facilities", food: "🍕 Food & Hubs", hostels: "🏠 Hostels",
         lightMode: "☀️ Light Mode", darkMode: "🌙 Dark Mode", tour: "🌟 Freshers Tour", emergency: "🚨 Emergency & Help", backToMap: "Back to Map",
         detailsTitle: "🎓 Campus Location Details", selectLocBadge: "Select Location",
-        welcomeTitle: "Welcome to VIT Bhopal Nav", welcomeDesc: "Click any building or landmark pin on the map to view detailed campus information for freshers.",
-        proTip: "💡 Pro Tip / Timings:", subpartsHeading: "EXPLORE SUB-PARTS & ROOMS",
-        sec1Title: "1. Academics & Departments", sec1Count: "5 Sub-parts", sec2Title: "2. Amenities & Guidance", sec2Count: "6 Amenities",
+        welcomeTitle: "Welcome to VIT Bhopal Nav", welcomeDesc: "The map view has been adjusted to display all campus locations simultaneously. Click any marker to view specific details.",
+        proTip: "💡 Pro Tip / Timings:", subpartHeading: "📌 Key Highlights & Details",
         emergencyHeading: "EMERGENCY CONTACTS & SERVICES", emergPhone: "📞 Phone Support", emergWhatsapp: "💬 WhatsApp Support",
         emergEmailHours: "✉️ Official Email & Hours", officeHoursLabel: "Office Hours:", emergAdmission: "🎓 Admission Contacts",
         emergPayment: "💳 Payment Failure Support", emailQueriesLabel: "Email Queries:", emergHelpline: "🚨 General Helpline",
-        chatTitle: "Campus Assistant", chatWelcome: "I'm your Smart Campus Assistant. Ask me anything about the campus.", chatPlaceholder: "Ask me anything..."
+        chatTitle: "🤖 Location Assistant", chatWelcome: "Hello! Ask me about any building or facility on campus!", chatSend: "Send",
+        chatPlaceholder: "Ask place (e.g., AB1, Special Block)..."
       },
       hi: {
         searchPlaceholder: "भवन, लैब या स्थान खोजें (जैसे AB 1, Special Block)...",
         allPlaces: "✨ सभी स्थान", academics: "🎓 शिक्षा", facilities: "🏢 सुविधाएँ", food: "🍕 खान-पान", hostels: "🏠 हॉस्टल",
         lightMode: "☀️ लाइट मोड", darkMode: "🌙 डार्क मोड", tour: "🌟 फ्रेशर्स टूर", emergency: "🚨 आपातकालीन सहायता", backToMap: "मैप पर वापस जाएं",
         detailsTitle: "🎓 कैंपस स्थान विवरण", selectLocBadge: "स्थान चुनें",
-        welcomeTitle: "VIT भोपाल नव में आपका स्वागत है", welcomeDesc: "फ्रेशर्स के लिए विस्तृत कैंपस जानकारी देखने के लिए मानचित्र पर किसी भी पिन पर क्लिक करें।",
-        proTip: "💡 प्रो टिप / समय:", subpartsHeading: "सब-पार्ट्स और कमरे देखें",
-        sec1Title: "1. शिक्षा और विभाग", sec1Count: "5 भाग", sec2Title: "2. सुविधाएँ और मार्गदर्शन", sec2Count: "6 सुविधाएँ",
+        welcomeTitle: "VIT भोपाल नव में आपका स्वागत है", welcomeDesc: "सभी कैंपस स्थानों को एक साथ दिखाने के लिए मैप व्यू को समायोजित किया गया है। विवरण देखने के लिए किसी भी पिन पर क्लिक करें।",
+        proTip: "💡 प्रो टिप / समय:", subpartHeading: "📌 मुख्य विशेषताएँ और विवरण",
         emergencyHeading: "आपातकालीन संपर्क और सेवाएँ", emergPhone: "📞 फोन सहायता", emergWhatsapp: "💬 व्हाट्सएप सहायता",
         emergEmailHours: "✉️ आधिकारिक ईमेल और समय", officeHoursLabel: "कार्यालय समय:", emergAdmission: "🎓 प्रवेश संपर्क",
         emergPayment: "💳 भुगतान विफलता सहायता", emailQueriesLabel: "ईमेल प्रश्न:", emergHelpline: "🚨 सामान्य हेल्पलाइन",
-        chatTitle: "कैंपस सहायक", chatWelcome: "मैं आपका स्मार्ट कैंपस सहायक हूँ। कैंपस के बारे में कुछ भी पूछें।", chatPlaceholder: "कुछ भी पूछें..."
+        chatTitle: "🤖 लोकेशन सहायक", chatWelcome: "नमस्ते! कैंपस के किसी भी भवन या सुविधा के बारे में मुझसे पूछें!", chatSend: "भेजें",
+        chatPlaceholder: "स्थान पूछें (जैसे AB1)..."
       },
       es: {
         searchPlaceholder: "Buscar edificios, laboratorios, lugares...",
         allPlaces: "✨ Todos", academics: "🎓 Académicos", facilities: "🏢 Instalaciones", food: "🍕 Comida", hostels: "🏠 Hostales",
         lightMode: "☀️ Modo Claro", darkMode: "🌙 Modo Oscuro", tour: "🌟 Tour de Novatos", emergency: "🚨 Emergencia y Ayuda", backToMap: "Volver al Mapa",
         detailsTitle: "🎓 Detalles de la Ubicación", selectLocBadge: "Seleccionar Ubicación",
-        welcomeTitle: "Bienvenido a VIT Bhopal Nav", welcomeDesc: "Haz clic en cualquier pin del mapa para ver información detallada.",
-        proTip: "💡 Consejo / Horarios:", subpartsHeading: "EXPLORAR SUBPARTES Y HABITACIONES",
-        sec1Title: "1. Académicos y Departamentos", sec1Count: "5 Subpartes", sec2Title: "2. Comodidades", sec2Count: "6 Comodidades",
+        welcomeTitle: "Bienvenido a VIT Bhopal Nav", welcomeDesc: "La vista del mapa se ha ajustado para mostrar todas las ubicaciones simultáneamente.",
+        proTip: "💡 Consejo / Horarios:", subpartHeading: "📌 Puntos Clave y Detalles",
         emergencyHeading: "CONTACTOS DE EMERGENCIA Y SERVICIOS", emergPhone: "📞 Soporte Telefónico", emergWhatsapp: "💬 Soporte WhatsApp",
         emergEmailHours: "✉️ Correo y Horarios", officeHoursLabel: "Horario de Oficina:", emergAdmission: "🎓 Contactos de Admisión",
         emergPayment: "💳 Soporte de Pago", emailQueriesLabel: "Consultas:", emergHelpline: "🚨 Línea de Ayuda",
-        chatTitle: "Asistente del Campus", chatWelcome: "Soy tu asistente inteligente del campus. Pregúntame lo que sea sobre el campus.", chatPlaceholder: "Pregúntame algo..."
+        chatTitle: "🤖 Asistente de Ubicación", chatWelcome: "¡Hola! Pregúntame sobre cualquier edificio o instalación en el campus.", chatSend: "Enviar",
+        chatPlaceholder: "Preguntar lugar..."
       },
       ur: {
         searchPlaceholder: "عمارتیں، لیبز تلاش کریں...",
         allPlaces: "✨ تمام مقامات", academics: "🎓 تعلیمی", facilities: "🏢 سہولیات", food: "🍕 کھانا", hostels: "🏠 ہاسٹل",
         lightMode: "☀️ لائٹ موڈ", darkMode: "🌙 ڈارک موڈ", tour: "🌟 فریشرز ٹور", emergency: "🚨 ہنگامی مدد", backToMap: "نقشے پر واپس",
         detailsTitle: "🎓 کیمپس کی تفصیلات", selectLocBadge: "مقام منتخب کریں",
-        welcomeTitle: "VIT بھوپال ناو میں خوش آمدید", welcomeDesc: "فریشرز کے لیے تفصیلی معلومات دیکھنے کے لیے نقشے پر کسی بھی پن پر کلک کریں۔",
-        proTip: "💡 ٹپ / اوقات:", subpartsHeading: "ذیلی حصے اور کمرے دیکھیں",
-        sec1Title: "1. اکیڈمکس اور ڈیپارٹمنٹس", sec1Count: "5 حصے", sec2Title: "2. سہولیات", sec2Count: "6 سہولیات",
+        welcomeTitle: "VIT بھوپال ناو میں خوش آمدید", welcomeDesc: "تمام مقامات کو ایک ساتھ دکھانے کے لیے نقشے کا منظر ایڈجسٹ کر دیا گیا ہے۔",
+        proTip: "💡 ٹپ / اوقات:", subpartHeading: "📌 اہم جھلکیاں اور تفصیلات",
         emergencyHeading: "ہنگامی رابطے اور خدمات", emergPhone: "📞 فون سپورٹ", emergWhatsapp: "💬 واٹس ایپ سپورٹ",
         emergEmailHours: "✉️ آفیشل ای میل اور اوقات", officeHoursLabel: "آفس کے اوقات:", emergAdmission: "🎓 داخلہ کے رابطے",
         emergPayment: "💳 ادائیگی کی ناکامی کی مدد", emailQueriesLabel: "ای میل سوالات:", emergHelpline: "🚨 جنرل ہیلپ لائن",
-        chatTitle: "کیمپس اسسٹنٹ", chatWelcome: "میں آپ کا اسمارٹ کیمپس اسسٹنٹ ہوں۔ کیمپس کے بارے میں کچھ بھی پوچھیں۔", chatPlaceholder: "کچھ بھی پوچھیں..."
+        chatTitle: "🤖 لوکیشن اسسٹنٹ", chatWelcome: "ہیلو! کیمپس میں کسی بھی عمارت کے بارے میں پوچھیں!", chatSend: "بھیجیں",
+        chatPlaceholder: "مقام پوچھیں..."
       },
       kn: {
         searchPlaceholder: "buildings, labs ಹುಡುಕಿ...",
         allPlaces: "✨ ಎಲ್ಲಾ ಸ್ಥಳಗಳು", academics: "🎓 ಶಿಕ್ಷಣ", facilities: "🏢 ಸೌಲಭ್ಯಗಳು", food: "🍕 ಆಹಾರ", hostels: "🏠 ಹಾಸ್ಟೆಲ್",
         lightMode: "☀️ ಲೈಟ್ ಮೋಡ್", darkMode: "🌙 ಡಾರ್ಕ್ ಮೋಡ್", tour: "🌟 ಪ್ರೆಶರ್ಸ್ ಟೂರ್", emergency: "🚨 ತುರ್ತು ಮತ್ತು ಸಹಾಯ", backToMap: "ನಕ್ಷೆಗೆ ಹಿಂತಿರುಗಿ",
         detailsTitle: "🎓 ಕ್ಯಾಂಪಸ್ ಸ್ಥಳದ ವಿವರಗಳು", selectLocBadge: "ಸ್ಥಳವನ್ನು ಆಯ್ಕೆಮಾಡಿ",
-        welcomeTitle: "VIT ಭೋಪಾಲ್ ನೇವ್‌ಗೆ ಸ್ವಾಗತ", welcomeDesc: "ಮಾಹಿತಿಗಾಗಿ ನಕ್ಷೆಯಲ್ಲಿ ಯಾವುದೇ ಪಿನ್ ಕ್ಲಿಕ್ ಮಾಡಿ.",
-        proTip: "💡 ಪ್ರೊ ಟಿಪ್ / ಸಮಯ:", subpartsHeading: "ಉಪ-ಭಾಗಗಳನ್ನು ಅನ್ವೇಷಿಸಿ",
-        sec1Title: "1. ಶಿಕ್ಷಣ ಮತ್ತು ವಿಭಾಗಗಳು", sec1Count: "5 ಭಾಗಗಳು", sec2Title: "2. ಸೌಲಭ್ಯಗಳು", sec2Count: "6 ಸೌಲಭ್ಯಗಳು",
+        welcomeTitle: "VIT ಭೋಪಾಲ್ ನೇವ್‌ಗೆ ಸ್ವಾಗತ", welcomeDesc: "ಎಲ್ಲಾ ಸ್ಥಳಗಳನ್ನು ಏಕಕಾಲದಲ್ಲಿ ತೋರಿಸಲು ನಕ್ಷೆಯ ವೀಕ್ಷಣೆಯನ್ನು ಹೊಂದಿಸಲಾಗಿದೆ.",
+        proTip: "💡 ಪ್ರೊ ಟಿಪ್ / ಸಮಯ:", subpartHeading: "📌 ಪ್ರಮುಖ ಮುಖ್ಯಾಂಶಗಳು",
         emergencyHeading: "ತುರ್ತು ಸಂಪರ್ಕಗಳು ಮತ್ತು ಸೇವೆಗಳು", emergPhone: "📞 ಫೋನ್ ಬೆಂಬಲ", emergWhatsapp: "💬 WhatsApp ಬೆಂಬಲ",
         emergEmailHours: "✉️ ಅಧಿಕೃತ ಇಮೇಲ್ ಮತ್ತು ಸಮಯ", officeHoursLabel: "ಕಚೇರಿ ಸಮಯ:", emergAdmission: "🎓 ಪ್ರವೇಶ ಸಂಪರ್ಕಗಳು",
         emergPayment: "💳 ಪಾವತಿ ವಿಫಲತೆ ಬೆಂಬಲ", emailQueriesLabel: "ಇಮೇಲ್ ಪ್ರಶ್ನೆಗಳು:", emergHelpline: "🚨 ಸಾಮಾನ್ಯ ಸಹಾಯವಾಣಿ",
-        chatTitle: "ಕ್ಯಾಂಪಸ್ ಸಹಾಯಕ", chatWelcome: "ನಾನು ನಿಮ್ಮ ಸ್ಮಾರ್ಟ್ ಕ್ಯಾಂಪಸ್ ಸಹಾಯಕ. ಕ್ಯಾಂಪಸ್ ಬಗ್ಗೆ ಏನನ್ನಾದರೂ ಕೇಳಿ.", chatPlaceholder: "ಏನನ್ನಾದರೂ ಕೇಳಿ..."
+        chatTitle: "🤖 ಸ್ಥಳ ಸಹಾಯಕ", chatWelcome: "ನಮಸ್ಕಾರ! ಯಾವುದೇ ಕಟ್ಟಡದ ಬಗ್ಗೆ ಕೇಳಿ!", chatSend: "ಕಳುಹಿಸು",
+        chatPlaceholder: "ಸ್ಥಳವನ್ನು ಕೇಳಿ..."
       },
       ta: {
         searchPlaceholder: "ህንடங்கள், ஆய்வகங்களைத் தேடுங்கள்...",
         allPlaces: "✨ அனைத்து இடங்கள்", academics: "🎓 கல்வி", facilities: "🏢 வசதிகள்", food: "🍕 உணவு", hostels: "🏠 விடுதிகள்",
         lightMode: "☀️ வெளிச்ச முறை", darkMode: "🌙 இருண்ட முறை", tour: "🌟 புதியவர்கள் சுற்றுலா", emergency: "🚨 அவசர உதவி", backToMap: "வரைபடத்திற்குத் திரும்பு",
         detailsTitle: "🎓 வளாக இட விவரங்கள்", selectLocBadge: "இடத்தைத் தேர்ந்தெடுக்கவும்",
-        welcomeTitle: "VIT Bhopal Nav-க்கு வரவேற்கிறோம்", welcomeDesc: "விவரங்களைக் காண வரைபடத்தில் கிளிக் செய்யவும்.",
-        proTip: "💡 குறிப்பு / நேரங்கள்:", subpartsHeading: "உட்பிரிவுகளை ஆராயுங்கள்",
-        sec1Title: "1. கல்வி மற்றும் துறைகள்", sec1Count: "5 பாகங்கள்", sec2Title: "2. வசதிகள்", sec2Count: "6 வசதிகள்",
+        welcomeTitle: "VIT Bhopal Nav-க்கு வரவேற்கிறோம்", welcomeDesc: "அனைத்து இடங்களையும் ஒரே பார்வையில் காட்ட வரைபடக் காட்சி சரிசெய்யப்பட்டுள்ளது.",
+        proTip: "💡 குறிப்பு / நேரங்கள்:", subpartHeading: "📌 முக்கிய குறிப்புகள்",
         emergencyHeading: "அவசர தொடர்புகள் மற்றும் சேவைகள்", emergPhone: "📞 தொலைபேசி ஆதரவு", emergWhatsapp: "💬 WhatsApp ஆதரவு",
         emergEmailHours: "✉️ அதிகாரப்பூர்வ மின்னஞ்சல்", officeHoursLabel: "அலுவலக நேரம்:", emergAdmission: "🎓 சேர்க்கை தொடர்புகள்",
         emergPayment: "💳 கட்டண உதவி", emailQueriesLabel: "மின்னஞ்சல் கேள்விகள்:", emergHelpline: "🚨 உதவி எண்",
-        chatTitle: "வளாக உதவி", chatWelcome: "நான் உங்கள் ஸ்மார்ட் வளாக உதவியாளர். வளாகத்தைப் பற்றி எதையும் கேளுங்கள்.", chatPlaceholder: "எதையும் கேளுங்கள்..."
+        chatTitle: "🤖 உதவி", chatWelcome: "வணக்கம்! எந்தவொரு கட்டிடம் பற்றியும் கேளுங்கள்!", chatSend: "அனுப்பு",
+        chatPlaceholder: "இடத்தைக் கேளுங்கள்..."
       },
       ne: {
         searchPlaceholder: "भवनहरू, ल्याबहरू खोज्नुहोस्...",
         allPlaces: "✨ सबै स्थानहरू", academics: "🎓 शैक्षिक", facilities: "🏢 सुविधाहरू", food: "🍕 खाना", hostels: "🏠 होस्टेल",
         lightMode: "☀️ लाइट मोड", darkMode: "🌙 डार्क मोड", tour: "🌟 फ्रेशर्स टुर", emergency: "🚨 आपतकालीन सहयोग", backToMap: "म्यापमा फर्कनुहोस्",
         detailsTitle: "🎓 क्याम्पस स्थान विवरण", selectLocBadge: "स्थान चयन गर्नुहोस्",
-        welcomeTitle: "VIT Bhopal Nav मा स्वागत छ", welcomeDesc: "विस्तृत जानकारीको लागि नक्सामा पिन क्लिक गर्नुहोस्।",
-        proTip: "💡 प्रो टिप / समय:", subpartsHeading: "उप-भागहरू अन्वेषण गर्नुहोस्",
-        sec1Title: "1. शैक्षिक र विभागहरू", sec1Count: "5 भागहरू", sec2Title: "2. सुविधाहरू", sec2Count: "6 सुविधाहरू",
+        welcomeTitle: "VIT Bhopal Nav मा स्वागत छ", welcomeDesc: "सबै क्याम्पस स्थानहरू एकै नजरमा देखाउन नक्सा दृश्य समायोजन गरिएको छ।",
+        proTip: "💡 प्रो टिप / समय:", subpartHeading: "📌 मुख्य विशेषताहरू",
         emergencyHeading: "आपतकालीन सम्पर्कहरू र सेवाहरू", emergPhone: "📞 फोन समर्थन", emergWhatsapp: "💬 व्हाट्सएप समर्थन",
         emergEmailHours: "✉️ आधिकारिक इमेल र समय", officeHoursLabel: "कार्यालय समय:", emergAdmission: "🎓 भर्ना सम्पर्कहरू",
         emergPayment: "💳 भुक्तानी विफलता समर्थन", emailQueriesLabel: "इमेल प्रश्नहरू:", emergHelpline: "🚨 सामान्य हेल्पलाइन",
-        chatTitle: "क्याम्पस सहायक", chatWelcome: "म तपाईंको स्मार्ट क्याम्पस सहायक हुँ। क्याम्पसको बारेमा जे पनि सोध्नुहोस्।", chatPlaceholder: "जे पनि सोध्नुहोस्..."
+        chatTitle: "🤖 स्थान सहायक", chatWelcome: "नमस्ते! क्याम्पसको बारेमा सोध्नुहोस्!", chatSend: "पठाउनुहोस्",
+        chatPlaceholder: "स्थान सोध्नुहोस्..."
       },
       ar: {
         searchPlaceholder: "البحث عن المباني والمختبرات...",
         allPlaces: "✨ كل الأماكن", academics: "🎓 أكاديميون", facilities: "🏢 مرافق", food: "🍕 طعام", hostels: "🏠 سكن",
         lightMode: "☀️ الوضع الفاتح", darkMode: "🌙 الوضع المظلم", tour: "🌟 جولة الجدد", emergency: "🚨 طوارئ ومساعدة", backToMap: "العودة للخريطة",
         detailsTitle: "🎓 تفاصيل الموقع", selectLocBadge: "حدد الموقع",
-        welcomeTitle: "مرحباً بك في VIT Bhopal Nav", welcomeDesc: "انقر فوق أي دبوس على الخريطة لعرض معلومات مفصلة.",
-        proTip: "💡 نصيحة / مواعيد:", subpartsHeading: "استكشاف الأقسام الفرعية",
-        sec1Title: "1. الأقسام الأكاديمية", sec1Count: "5 أقسام", sec2Title: "2. المرافق والتوجيه", sec2Count: "6 مرافق",
+        welcomeTitle: "مرحباً بك في VIT Bhopal Nav", welcomeDesc: "تم ضبط عرض الخريطة لتظهر جميع مواقع الحرم الجامعي في عرض واحد.",
+        proTip: "💡 نصيحة / مواعيد:", subpartHeading: "📌 النقاط الرئيسية والتفاصيل",
         emergencyHeading: "جهات اتصال الطوارئ والخدمات", emergPhone: "📞 الدعم الهاتفي", emergWhatsapp: "💬 دعم واتساب",
         emergEmailHours: "✉️ البريد الإلكتروني الرسمي", officeHoursLabel: "ساعات العمل:", emergAdmission: "🎓 جهات القبول",
         emergPayment: "💳 دعم فشل الدفع", emailQueriesLabel: "استفسارات البريد:", emergHelpline: "🚨 خط المساعدة العام",
-        chatTitle: "مساعد الحرم الجامعي", chatWelcome: "أنا مساعد الحرم الجامعي الذكي الخاص بك. اسألني أي شيء عن الحرم الجامعي.", chatPlaceholder: "اسألني أي شيء..."
+        chatTitle: "🤖 مساعد الموقع", chatWelcome: "مرحباً! اسألني عن أي مبنى في الحرم الجامعي!", chatSend: "إرسال",
+        chatPlaceholder: "اسأل عن مكان..."
       }
     };
 
@@ -1208,12 +1028,7 @@
       document.getElementById('placeTitle').innerText = t.welcomeTitle;
       document.getElementById('landmarkText').innerText = t.welcomeDesc;
       document.getElementById('uiProTip').innerText = t.proTip;
-
-      document.getElementById('uiSubpartsHeading').innerText = t.subpartsHeading;
-      document.getElementById('uiSec1Title').innerText = t.sec1Title;
-      document.getElementById('uiSec1Count').innerText = t.sec1Count;
-      document.getElementById('uiSec2Title').innerText = t.sec2Title;
-      document.getElementById('uiSec2Count').innerText = t.sec2Count;
+      document.getElementById('uiSubpartHeading').innerText = t.subpartHeading;
 
       document.getElementById('uiEmergencyHeading').innerText = t.emergencyHeading;
       document.getElementById('uiEmergPhone').innerHTML = t.emergPhone;
@@ -1225,9 +1040,10 @@
       document.getElementById('uiEmailQueriesLabel').innerText = t.emailQueriesLabel;
       document.getElementById('uiEmergHelpline').innerHTML = t.emergHelpline;
 
-      if(document.getElementById('uiChatTitle')) document.getElementById('uiChatTitle').innerHTML = t.chatTitle;
-      if(document.getElementById('uiChatWelcome')) document.getElementById('uiChatWelcome').innerText = t.chatWelcome;
-      if(document.getElementById('chatInput')) document.getElementById('chatInput').placeholder = t.chatPlaceholder;
+      document.getElementById('uiChatTitle').innerHTML = t.chatTitle;
+      document.getElementById('uiChatWelcome').innerText = t.chatWelcome;
+      document.getElementById('uiChatSend').innerText = t.chatSend;
+      document.getElementById('chatInput').placeholder = t.chatPlaceholder;
     }
 
     // Theme Toggle
@@ -1259,12 +1075,6 @@
       nextStop();
     }
 
-    // Accordion Toggle
-    function toggleAccordion(id) {
-      const item = document.getElementById(id);
-      item.classList.toggle('expanded');
-    }
-
     // Slide Panel Controls
     function openPanel() {
       const panel = document.getElementById('detailPanel');
@@ -1283,14 +1093,12 @@
     function openEmergencySection() {
       const panel = document.getElementById('detailPanel');
       const locationCard = document.getElementById('locationDetailsCard');
-      const subpartsSec = document.getElementById('subpartsSectionContainer');
       const emergencySec = document.getElementById('emergencySection');
       const titleMain = document.getElementById('panelTitleMain');
       const t = translations[currentLang];
 
       titleMain.innerText = t.emergency;
       locationCard.style.display = 'none';
-      subpartsSec.style.display = 'none';
       emergencySec.style.display = 'flex';
 
       openPanel();
@@ -1328,16 +1136,14 @@
       parcel: createCustomIcon('parcel', iconsSVG.parcel)
     };
 
-    const VIT_BHOPAL_CENTER = [23.075473, 76.851000];
     const CAMPUS_BOUNDS = L.latLngBounds(
       L.latLng(23.068000, 76.838000),
       L.latLng(23.088000, 76.865000)
     );
 
     const map = L.map('map', {
-      center: VIT_BHOPAL_CENTER,
-      zoom: 16,
-      minZoom: 15,
+      zoom: 15,
+      minZoom: 14,
       maxZoom: 19,
       maxBounds: CAMPUS_BOUNDS,
       maxBoundsViscosity: 0.9,
@@ -1362,6 +1168,12 @@
         lat: 23.077533, 
         lng: 76.851404, 
         landmark: "Here we study, execute events, meetings, proctor meetings, give tests, quizzes. There are several cabins allocated to different faculty. Controller of examination cabin is in this building. The IT department for the whole college is located here (cabin no: AB213).", 
+        subparts: [
+          "It is of 5 floors.",
+          "CTS office is on floor 2 (AB213).",
+          "COE (controller of examinations) office is also in this building.",
+          "Each floor consist of 29 to 30 rooms / classes."
+        ],
         extraInfo: "Open Mon-Sat, 8:30 AM – 7:00 PM. High-speed Wi-Fi network (VIT-Campus) is accessible throughout all floors.",
         hostelWalkTime: "13-15 min", 
         ab1WalkTime: "0 min" 
@@ -1374,6 +1186,11 @@
         lat: 23.073653, 
         lng: 76.855719, 
         landmark: "Here students attend major departmental classes, lectures, and academic discussions. It houses modern classrooms, multiple faculty cabins across floors, and specialized study areas where tests, quizzes, and academic coordination take place every day.", 
+        subparts: [
+          "Multi-story modern building equipped with state-of-the-art lecture rooms.",
+          "Houses major departmental faculty cabins and academic coordination offices.",
+          "Features dedicated discussion zones and smart projector setups on every floor."
+        ],
         extraInfo: "Features smart lecture theatres equipped with projector systems and audio amplifiers for large classes.",
         hostelWalkTime: "7-9 min", 
         ab1WalkTime: "10 min" 
@@ -1386,6 +1203,11 @@
         lat: 23.078600, 
         lng: 76.849959, 
         landmark: "This is the main hub for those who love practical implementations. We have several labs in this building which includes Aerospace engineering (uses a real aircraft for explanation of concepts), Robotics lab, and Gaming lab. The most important thing is that placement classes and all interviews from all kinds of companies happen in this building. This building has its own AURA.", 
+        subparts: [
+          "Hub for technical and practical industries (like aerospace, gaming lab, robotics).",
+          "Major placement classes and interviews take place here.",
+          "Features specialized hardware setups and hands-on testing workstations."
+        ],
         extraInfo: "Mandatory ID card scanning at entrance. Dress code and lab safety guidelines must be strictly followed.",
         hostelWalkTime: "14-16 min", 
         ab1WalkTime: "3 min" 
@@ -1398,6 +1220,11 @@
         lat: 23.078096, 
         lng: 76.850202, 
         landmark: "Here all the civil engineers have their classes and various practicals related to real-world situations.", 
+        subparts: [
+          "Dedicated studios and workshop spaces for design and structural planning.",
+          "Equipped with material testing machines and large drafting tables.",
+          "Hosts architecture and civil engineering design reviews."
+        ],
         extraInfo: "Includes spacious drafting studios, model-making workshops, and material testing hardware.",
         hostelWalkTime: "14-16 min", 
         ab1WalkTime: "2 min" 
@@ -1410,6 +1237,11 @@
         lat: 23.075439, 
         lng: 76.859820, 
         landmark: "Here the boy students of the campus stay who have opted for hostel services. It is a lively residential block equipped with essential amenities, study spaces, and easy access to nearby dining mess halls.", 
+        subparts: [
+          "Secure multi-floor residential block with round-the-clock wardens.",
+          "Furnished rooms with high-speed internet connectivity.",
+          "Direct proximity to indoor recreation and mess facilities."
+        ],
         extraInfo: "Curfew timings apply. In-time is strictly monitored by hostel wardens at the entrance gates.",
         hostelWalkTime: "2 min", 
         ab1WalkTime: "13-15 min" 
@@ -1422,6 +1254,11 @@
         lat: 23.073343, 
         lng: 76.858988, 
         landmark: "This entire residential cluster houses all the boy students across different hostel blocks who have opted for hostel services. It includes recreational spaces, mess dining areas, and night canteen facilities for late-night study sessions.", 
+        subparts: [
+          "Sprawling cluster covering multiple residential blocks for male students.",
+          "Includes dedicated night canteens, laundry services, and outdoor courts.",
+          "Centralized security checkpoints and biometric access control."
+        ],
         extraInfo: "Night canteens typically operate up to 2:00 AM during exam preparation weeks.",
         hostelWalkTime: "0 min", 
         ab1WalkTime: "13-15 min" 
@@ -1434,6 +1271,11 @@
         lat: 23.0750236, 
         lng: 76.8531026, 
         landmark: "Here all the student girls of the campus who have opted for hostel services stay. Includes dining services (Mayuri Mess and AB Catering Mess) and various amenities inside the hostel like a badminton court etc.", 
+        subparts: [
+          "Dedicated secure zone with strict perimeter monitoring and biometric entry.",
+          "Houses in-house dining messes like Mayuri Mess and AB Catering Mess.",
+          "Includes recreational facilities like indoor courts and study reading rooms."
+        ],
         extraInfo: "Equipped with 24/7 security personnel, biometric entry points, and an in-house medical assistance desk.",
         hostelWalkTime: "8 min", 
         ab1WalkTime: "6 min" 
@@ -1446,6 +1288,11 @@
         lat: 23.072532, 
         lng: 76.857736, 
         landmark: "This is a major hangout hub on campus! Various club meetings and student discussions basically take place over here. It features a bustling food court area with multiple eateries and fast-food outlets, and also includes a separate girls block for added convenience and comfort.", 
+        subparts: [
+          "Central hub for student club meetings, informal discussions, and hangouts.",
+          "Features a vibrant food court with multiple snack joints and eateries.",
+          "Incorporates a dedicated section supporting multi-purpose student facilities."
+        ],
         extraInfo: "Popular food joints include cafes and juice bars. Peak crowding occurs right after afternoon lecture hours.",
         hostelWalkTime: "3 min", 
         ab1WalkTime: "12 min" 
@@ -1458,6 +1305,11 @@
         lat: 23.072424, 
         lng: 76.859578, 
         landmark: "Main hostel dining mess hall providing daily meals to hostellers.", 
+        subparts: [
+          "Large capacity dining facility serving hygienic meals daily.",
+          "Operates on a structured schedule for breakfast, lunch, snacks, and dinner.",
+          "Offers diverse menu options catering to regional student preferences."
+        ],
         extraInfo: "Breakfast: 7:30-9:30 AM | Lunch: 12:00-2:00 PM | Snacks: 5:00-6:00 PM | Dinner: 7:30-9:30 PM.",
         hostelWalkTime: "2 min", 
         ab1WalkTime: "14 min" 
@@ -1470,6 +1322,11 @@
         lat: 23.073590, 
         lng: 76.860230, 
         landmark: "Hostel dining hall facility for daily meals.", 
+        subparts: [
+          "Spacious mess hall providing structured daily dining plans.",
+          "Maintains clean dining standards with regular quality checks.",
+          "Features special weekend meal arrangements."
+        ],
         extraInfo: "Offers structured vegetarian and non-vegetarian buffet options with scheduled weekly special menus.",
         hostelWalkTime: "2 min", 
         ab1WalkTime: "14 min" 
@@ -1482,6 +1339,11 @@
         lat: 23.074374, 
         lng: 76.851067, 
         landmark: "Here all the events like Ganesh Chaturthi, dance parties, and cultural gatherings take place.", 
+        subparts: [
+          "Open-air amphitheater design suitable for massive student gatherings.",
+          "Hosts major cultural festivals, celebrations, and club performances.",
+          "Equipped with audio staging setups for entertainment events."
+        ],
         extraInfo: "Large open-air amphitheater setting capable of hosting thousands of attendees simultaneously.",
         hostelWalkTime: "10 min", 
         ab1WalkTime: "6 min" 
@@ -1494,6 +1356,11 @@
         lat: 23.074642, 
         lng: 76.850098, 
         landmark: "Here students can pick up their parcels from various delivery companies like Amazon, Flipkart, etc.", 
+        subparts: [
+          "Centralized logistics collection point for online deliveries and couriers.",
+          "Streamlined verification system using student digital IDs.",
+          "Operates during scheduled afternoon and evening windows."
+        ],
         extraInfo: "Collection timings: 10:00 AM to 6:00 PM. Bring your student digital ID and tracking confirmation message.",
         hostelWalkTime: "11 min", 
         ab1WalkTime: "7 min" 
@@ -1506,6 +1373,11 @@
         lat: 23.084526, 
         lng: 76.849599, 
         landmark: "Primary campus entry gate off the highway with 24/7 security.", 
+        subparts: [
+          "Main outer checkpoint connecting campus traffic to the highway.",
+          "Staffed continuously by professional security personnel.",
+          "Regulates vehicle entries and visitor permissions."
+        ],
         extraInfo: "Out-pass approvals required for student exits beyond standard timings.",
         hostelWalkTime: "25 min", 
         ab1WalkTime: "18 min" 
@@ -1518,6 +1390,11 @@
         lat: 23.075473, 
         lng: 76.849643, 
         landmark: "Secondary security gate checkpoint & main entry.", 
+        subparts: [
+          "Key access point heavily utilized by daily commuters and local transit.",
+          "Equipped with security check booth and barrier gates.",
+          "Close to primary academic and administrative pathways."
+        ],
         extraInfo: "Frequently used for local transport autos and campus taxi drop-offs.",
         hostelWalkTime: "12 min", 
         ab1WalkTime: "8 min" 
@@ -1530,6 +1407,11 @@
         lat: 23.074413, 
         lng: 76.853938, 
         landmark: "It is the most favourite part of the campus. Here all the tournaments like Aarambh take place where many cricket teams compete against each other, and big events like adVITya take place—basically a 5-day annual event where big superstars of singing and the Bollywood industry perform in front of students.", 
+        subparts: [
+          "Main venue for sports tournaments like Aarambh cricket leagues.",
+          "Hosts adVITya, the grand 5-day annual cultural and musical fest.",
+          "Surrounded by open seating spaces and lighting towers for evening events."
+        ],
         extraInfo: "Floodlights are installed for evening matches and sports fest practice sessions.",
         hostelWalkTime: "6 min", 
         ab1WalkTime: "8 min" 
@@ -1542,29 +1424,41 @@
         lat: 23.074650, 
         lng: 76.855858, 
         landmark: "This is the big ground of the campus where students gather for intense football matches, outdoor sports practice, and major athletic activities. It serves as a energetic open space right next to the hostel zone for sports enthusiasts.", 
+        subparts: [
+          "Expansive turf field dedicated to football and outdoor athletics.",
+          "Serves as a popular evening recreation ground near the hostel clusters.",
+          "Frequently utilized for inter-department matches and fitness drills."
+        ],
         extraInfo: "Open for general student access during early morning and late afternoon hours.",
         hostelWalkTime: "4 min", 
         ab1WalkTime: "9 min" 
       },
       { 
         id: "mph_lion_pharmacy", 
-        name: "Medical Centre & Pharmacy", 
-        category: "Medical", 
+        name: "Multi Purpose Hall , Lion Statue & Pharmacy", 
+        category: "Amenity", 
         iconType: "amenity", 
-        lat: 23.074100, 
-        lng: 76.852500, 
-        landmark: "First aid, emergency medical assistance, and medicine dispensary.", 
-        extraInfo: "24/7 emergency care available on campus.",
-        hostelWalkTime: "6 min", 
-        ab1WalkTime: "7 min" 
+        lat: 23.076172, 
+        lng: 76.849897, 
+        landmark: "A multi-purpose campus hub featuring the iconic Lion Statue, indoor multi-purpose hall facilities for events and gatherings, and an on-site pharmacy for medical essentials.", 
+        subparts: [
+          "Features the iconic Lion Statue landmark popular for photos.",
+          "Indoor multi-purpose hall for indoor sports, meetings, and exhibitions.",
+          "Includes an on-site medical pharmacy store for quick healthcare needs."
+        ],
+        extraInfo: "Open daily for emergency supplies, indoor recreation, and landmark visits.",
+        hostelWalkTime: "12 min", 
+        ab1WalkTime: "5 min" 
       }
     ];
 
     let markerMap = {};
 
-    function renderMarkers(data, autoRelocate = true) {
+    function renderMarkers(data, fitBoundsFlag = false) {
       Object.values(markerMap).forEach(m => map.removeLayer(m));
       markerMap = {};
+
+      const latLngs = [];
 
       data.forEach(place => {
         const marker = L.marker([place.lat, place.lng], {
@@ -1575,10 +1469,12 @@
         marker.on('click', () => selectPlace(place));
 
         markerMap[place.id] = marker;
+        latLngs.push([place.lat, place.lng]);
       });
 
-      if (autoRelocate && data.length > 0) {
-        map.setView([data[0].lat, data[0].lng], 17);
+      if (fitBoundsFlag && latLngs.length > 0) {
+        const bounds = L.latLngBounds(latLngs);
+        map.fitBounds(bounds, { padding: [60, 60], maxZoom: 16 });
       }
     }
 
@@ -1586,12 +1482,27 @@
       const t = translations[currentLang];
       document.getElementById('panelTitleMain').innerText = t.detailsTitle;
       document.getElementById('locationDetailsCard').style.display = 'block';
-      document.getElementById('subpartsSectionContainer').style.display = 'flex';
       document.getElementById('emergencySection').style.display = 'flex';
 
       document.getElementById('placeCategory').innerText = place.category;
       document.getElementById('placeTitle').innerText = place.name;
       document.getElementById('landmarkText').innerText = place.landmark;
+
+      // Handle Subpart Section
+      const subpartContainer = document.getElementById('subpartContainer');
+      const subpartList = document.getElementById('subpartList');
+      subpartList.innerHTML = '';
+
+      if (place.subparts && place.subparts.length > 0) {
+        place.subparts.forEach(point => {
+          const li = document.createElement('li');
+          li.innerText = point;
+          subpartList.appendChild(li);
+        });
+        subpartContainer.style.display = 'block';
+      } else {
+        subpartContainer.style.display = 'none';
+      }
 
       const extraBox = document.getElementById('extraDetailsBox');
       const extraText = document.getElementById('extraDetailsText');
@@ -1642,7 +1553,7 @@
       }
 
       if (category === 'all') {
-        renderMarkers(campusData, false);
+        renderMarkers(campusData, true);
       } else {
         const filtered = campusData.filter(p => p.category === category);
         renderMarkers(filtered, true);
@@ -1661,7 +1572,7 @@
 
         if (!query) {
           listContainer.classList.remove('active');
-          renderMarkers(campusData, false);
+          renderMarkers(campusData, true);
           return;
         }
 
@@ -1669,7 +1580,8 @@
           p.name.toLowerCase().includes(query) || 
           p.landmark.toLowerCase().includes(query) ||
           p.category.toLowerCase().includes(query) ||
-          (p.extraInfo && p.extraInfo.toLowerCase().includes(query))
+          (p.extraInfo && p.extraInfo.toLowerCase().includes(query)) ||
+          (p.subparts && p.subparts.some(sp => sp.toLowerCase().includes(query)))
         );
 
         listContainer.innerHTML = '';
@@ -1690,7 +1602,7 @@
           listContainer.classList.remove('active');
         }
 
-        renderMarkers(matches, false);
+        renderMarkers(matches, true);
       }, 150);
     }
 
@@ -1698,335 +1610,72 @@
       document.getElementById('searchInput').value = '';
       document.getElementById('clearSearchBtn').hidden = true;
       document.getElementById('autocompleteList').classList.remove('active');
-      renderMarkers(campusData, false);
+      renderMarkers(campusData, true);
     }
 
-    /*==================================================
-              CAMPUS ASSISTANT V2 ENGINE
-    ==================================================*/
-    const CampusAssistant = {
-      history: [],
-      lastIntent: null,
-      lastSuggestions: [],
-      currentPlace: null,
-      typing: false,
-      intents: {
-        food: [
-          "food","eat","hungry","canteen","mess",
-          "restaurant","pizza","snacks","coffee",
-          "cafeteria","breakfast","lunch","dinner"
-        ],
-        library: [
-          "library","books","study","reading",
-          "print","printing","xerox","photocopy"
-        ],
-        hostel: [
-          "hostel","room","boys hostel",
-          "girls hostel","bh1","bh2",
-          "gh","accommodation"
-        ],
-        medical: [
-          "medical","doctor","hospital",
-          "clinic","medicine","pharmacy",
-          "health","injury","fever"
-        ],
-        sports: [
-          "sports","football","cricket",
-          "badminton","basketball",
-          "gym","match","ground"
-        ],
-        academics: [
-          "class","lecture","faculty",
-          "teacher","professor","lab",
-          "academic","ab1","ab2",
-          "architecture"
-        ],
-        tour: [
-          "tour","visit","explore",
-          "campus","new","fresher",
-          "first time"
-        ],
-        greeting: [
-          "hi","hello","hey",
-          "good morning",
-          "good evening",
-          "good afternoon"
-        ],
-        thanks: [
-          "thanks","thank you","thx"
-        ]
-      },
-      synonyms: {
-        lib:"library",
-        libary:"library",
-        libray:"library",
-        caf:"canteen",
-        hostelblock:"hostel",
-        hostel1:"boys hostel",
-        hostel2:"boys hostel",
-        med:"medical",
-        hosp:"hospital",
-        acad:"academic",
-        cls:"class",
-        prof:"faculty"
-      }
-    };
-
-    function normalizeText(text){
-      text = text.toLowerCase();
-      text = text.replace(/[^\w\s]/g," ");
-      text = text.replace(/\s+/g," ");
-      Object.keys(CampusAssistant.synonyms).forEach(word => {
-        text = text.replaceAll(word, CampusAssistant.synonyms[word]);
-      });
-      return text.trim();
+    function toggleChatbot() {
+      document.getElementById('chatPopup').classList.toggle('active');
     }
 
-    function similarity(a,b){
-      a = a.toLowerCase();
-      b = b.toLowerCase();
-      if(a === b) return 1;
-      let matches = 0;
-      for(let c of a){
-        if(b.includes(c)) matches++;
-      }
-      return matches / Math.max(a.length, b.length);
+    function handleChatKeyPress(event) {
+      if (event.key === 'Enter') sendChatMessage();
     }
 
-    function bestCampusMatch(query){
-      let best = null;
-      let score = 0;
-      campusData.forEach(place => {
-        const s = similarity(query, place.name);
-        if(s > score){
-          score = s;
-          best = place;
-        }
-      });
-      if(score > 0.45) return best;
-      return null;
-    }
-
-    function detectIntent(text){
-      text = normalizeText(text);
-      for(const intent in CampusAssistant.intents){
-        const words = CampusAssistant.intents[intent];
-        for(const word of words){
-          if(text.includes(word)) return intent;
-        }
-      }
-      return "location";
-    }
-
-    function addBotMessage(html){
-      appendChatMessage(html, "bot");
-    }
-
-    function addUserMessage(html){
-      appendChatMessage(html, "user");
-    }
-
-    function typingAnimation(callback){
-      if(CampusAssistant.typing) return;
-      CampusAssistant.typing = true;
-      const id = "typingBubble";
-      addBotMessage(`<span id="${id}">⏳ Typing...</span>`);
-      
-      setTimeout(() => {
-        const bubble = document.getElementById(id);
-        if(bubble && bubble.parentElement) bubble.parentElement.remove();
-        CampusAssistant.typing = false;
-        callback();
-      }, 700);
-    }
-
-    function findPlaces(query){
-      query = normalizeText(query);
-      const results = [];
-      campusData.forEach(place => {
-        const searchString = (
-          place.name + " " +
-          place.category + " " +
-          place.landmark + " " +
-          place.id
-        ).toLowerCase();
-        if(searchString.includes(query)) results.push(place);
-      });
-      return results;
-    }
-
-    function rememberSuggestions(list){
-      CampusAssistant.lastSuggestions = list;
-    }
-
-    function getRemembered(index){
-      if(index < CampusAssistant.lastSuggestions.length)
-        return CampusAssistant.lastSuggestions[index];
-      return null;
-    }
-
-    function openPlace(place){
-      CampusAssistant.currentPlace = place;
-      if (typeof selectPlace === 'function') {
-        selectPlace(place);
-      }
-      return `
-        <b>${place.name}</b><br><br>
-        📍 ${place.landmark}<br><br>
-        🚶 Hostel Walk : ${place.hostelWalkTime || 'N/A'}<br>
-        🎓 AB1 Walk : ${place.ab1WalkTime || 'N/A'}
-      `;
-    }
-
-    function categoryResponse(intent){
-      let places = [];
-      switch(intent){
-        case "food":
-          places = campusData.filter(p => p.category === "Food");
-          break;
-        case "hostel":
-          places = campusData.filter(p => p.category === "Hostel");
-          break;
-        case "sports":
-          places = campusData.filter(p => p.category === "Sports");
-          break;
-        case "medical":
-          places = campusData.filter(p => p.id === "mph_lion_pharmacy");
-          break;
-        case "academics":
-          places = campusData.filter(p => p.category === "Academic");
-          break;
-      }
-
-      rememberSuggestions(places);
-      let html = `I found ${places.length} place(s).<br><br>`;
-      places.forEach((p, i) => {
-        html += `${i+1}. <b>${p.name}</b><br>`;
-      });
-      html += "<br>Reply with a number.";
-      return html;
-    }
-
-    function continueConversation(text){
-      text = text.toLowerCase();
-      if(!CampusAssistant.currentPlace) return null;
-
-      if(text.includes("distance") || text.includes("far")){
-        return `🚶 Hostel Walk : ${CampusAssistant.currentPlace.hostelWalkTime || 'N/A'}<br>🎓 AB1 Walk : ${CampusAssistant.currentPlace.ab1WalkTime || 'N/A'}`;
-      }
-
-      if(text.includes("map") || text.includes("show")){
-        if (typeof selectPlace === 'function') {
-          selectPlace(CampusAssistant.currentPlace);
-        }
-        return "📍 Showing it on the map.";
-      }
-
-      if(text.includes("more") || text.includes("details")){
-        return CampusAssistant.currentPlace.landmark;
-      }
-
-      return null;
-    }
-
-    function searchLocationData(message){
-      message = normalizeText(message);
-      
-      const follow = continueConversation(message);
-      if(follow) return follow;
-
-      const intent = detectIntent(message);
-      CampusAssistant.lastIntent = intent;
-
-      if(intent === "greeting") return "👋 Hello! How can I help you around campus?";
-      if(intent === "thanks") return "😊 Happy to help!";
-      if(intent === "tour"){
-        if (typeof startFreshersTour === 'function') {
-          startFreshersTour();
-        }
-        return "🧭 Starting the Freshers Tour.";
-      }
-
-      if(["1", "2", "3", "4"].includes(message)){
-        const place = getRemembered(Number(message) - 1);
-        if(place) return openPlace(place);
-      }
-
-      if(["food", "hostel", "sports", "medical", "academics"].includes(intent)){
-        return categoryResponse(intent);
-      }
-
-      const direct = findPlaces(message);
-      if(direct.length){
-        rememberSuggestions(direct);
-        return openPlace(direct[0]);
-      }
-
-      const fuzzy = bestCampusMatch(message);
-      if(fuzzy){
-        return `Did you mean <b>${fuzzy.name}</b>?<br><br>${openPlace(fuzzy)}`;
-      }
-
-      return `
-        😕 I couldn't understand that.<br>
-        Try asking:<br>
-        • Where is AB1?<br>
-        • I'm hungry<br>
-        • Medical Centre<br>
-        • Boys Hostel<br>
-        • Football Ground
-      `;
-    }
-
-    function quickAsk(text){
-      document.getElementById("chatInput").value = text;
-      sendChatMessage();
-    }
-
-    function toggleChatbot(){
-      const popup = document.getElementById("chatPopup");
-      popup.classList.toggle("active");
-      if(popup.classList.contains("active")){
-        setTimeout(() => {
-          document.getElementById("chatInput").focus();
-        }, 150);
-      }
-    }
-
-    function handleChatKeyPress(event){
-      if(event.key === "Enter"){
-        sendChatMessage();
-      }
-    }
-
-    function appendChatMessage(message, sender){
-      const chat = document.getElementById("chatMessages");
-      const bubble = document.createElement("div");
-      bubble.className = `chat-msg ${sender}`;
-      bubble.innerHTML = message;
-      chat.appendChild(bubble);
-      chat.scrollTop = chat.scrollHeight;
-    }
-
-    function sendChatMessage(){
-      const input = document.getElementById("chatInput");
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
       const text = input.value.trim();
-      if(text === "") return;
+      if (!text) return;
 
-      addUserMessage(text);
-      CampusAssistant.history.push({ role: "user", text: text });
+      appendChatMessage(text, 'user');
+      input.value = '';
 
-      input.value = "";
-
-      typingAnimation(() => {
-        const reply = searchLocationData(text);
-        addBotMessage(reply);
-        CampusAssistant.history.push({ role: "assistant", text: reply });
-      });
+      setTimeout(() => {
+        const reply = handleChatQuery(text);
+        appendChatMessage(reply, 'bot');
+      }, 300);
     }
 
-    // Initial Load Setup
-    renderMarkers(campusData, false);
+    function appendChatMessage(message, sender) {
+      const container = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `chat-msg ${sender}`;
+      msgDiv.innerHTML = message;
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function handleChatQuery(query) {
+      const cleanQuery = query.toLowerCase();
+      const words = cleanQuery.replace(/[^\w\s]/gi, '').split(/\s+/);
+      const matchedPlaces = new Set();
+
+      campusData.forEach(place => {
+        const pName = place.name.toLowerCase();
+        const pLandmark = place.landmark.toLowerCase();
+        const pExtra = place.extraInfo ? place.extraInfo.toLowerCase() : "";
+        const pSubparts = place.subparts ? place.subparts.join(" ").toLowerCase() : "";
+        words.forEach(word => {
+          if (word.length >= 3 && (pName.includes(word) || pLandmark.includes(word) || pExtra.includes(word) || pSubparts.includes(word) || place.id.toLowerCase().includes(word))) {
+            matchedPlaces.add(place);
+          }
+        });
+      });
+
+      const results = Array.from(matchedPlaces);
+      if (results.length === 0) {
+        return "I couldn't find a place matching that. You can search for buildings, hostels, and labs!";
+      }
+
+      let responseStr = `Matches found:<br><ul style="margin: 6px 0; padding-left: 16px;">`;
+      results.forEach(place => {
+        responseStr += `<li style="margin-bottom:6px; cursor:pointer;" onclick="selectFromAutocomplete('${place.id}')"><strong>${place.name}</strong></li>`;
+      });
+      responseStr += `</ul>`;
+      return responseStr;
+    }
+
+    // Initial Load Setup - Fit all locations in view and update description box welcome text
+    renderMarkers(campusData, true);
   </script>
 </body>
 </html>
