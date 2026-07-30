@@ -109,6 +109,9 @@
     .custom-svg-icon.hostel { background: #7c3aed; color: #ff007f; box-shadow: 0 0 12px rgba(255, 0, 127, 0.8); }
     .custom-svg-icon.sports { background: #059669; color: #00ff66; box-shadow: 0 0 12px rgba(0, 255, 102, 0.8); }
     .custom-svg-icon.amenity { background: #475569; color: #ffffff; box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+    .custom-svg-icon.emergency { background: #dc2626; color: #ffffff; box-shadow: 0 0 15px rgba(220, 38, 38, 0.9); }
+    .custom-svg-icon.gate { background: #ea580c; color: #ccff00; box-shadow: 0 0 12px rgba(234, 88, 12, 0.9); }
+    .custom-svg-icon.parcel { background: #8b5cf6; color: #00f0ff; box-shadow: 0 0 12px rgba(139, 92, 246, 0.8); }
 
     /* Floating Search & Top Navigation Overlay */
     .top-floating-bar {
@@ -279,11 +282,44 @@
       white-space: nowrap;
     }
 
-    /* SLIDE-OVER DETAILS PANEL (Appears when location icon is clicked) */
+    /* QUICK BACKTRACK BUTTON (Appears when panel is active for instant fast return) */
+    .quick-back-fab {
+      position: fixed;
+      bottom: 25px;
+      left: 25px;
+      z-index: 2600;
+      background: var(--bg-card);
+      border: 2px solid var(--accent-active);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4), var(--glow-active);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    }
+
+    .quick-back-fab.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .quick-back-fab:hover {
+      background: var(--accent-active);
+      color: #000;
+    }
+
+    /* SLIDE-OVER DETAILS PANEL */
     .slide-over-panel {
       position: fixed;
       top: 0;
-      right: -480px; /* Hidden off-screen by default */
+      right: -480px;
       width: 450px;
       max-width: 100vw;
       height: 100vh;
@@ -300,7 +336,7 @@
     }
 
     .slide-over-panel.active {
-      right: 0; /* Slide into view */
+      right: 0;
     }
 
     .panel-header {
@@ -387,7 +423,7 @@
     .details-card p {
       font-size: 14px;
       color: var(--text-sub);
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     /* Drawer / Accordion Section Styles */
@@ -685,11 +721,16 @@
     <!-- FULL SCREEN MAP canvas -->
     <div id="map"></div>
 
+    <!-- INSTANT BACKTRACK FLOATING BUTTON -->
+    <button class="quick-back-fab" id="quickBackBtn" onclick="quickBackToMap()">
+      <span>← Back to Map</span>
+    </button>
+
     <!-- FLOATING TOP SEARCH BAR & FILTERS OVERLAY -->
     <div class="top-floating-bar">
       <div class="search-input-wrapper">
         <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input type="text" id="searchInput" placeholder="Search buildings, labs, landmarks (e.g. AB 1, AI Lab)..." autocomplete="off" oninput="handleSearchInput()">
+        <input type="text" id="searchInput" placeholder="Search buildings, labs, landmarks (e.g. AB 1, Special Block)..." autocomplete="off" oninput="handleSearchInput()">
         <button id="clearSearchBtn" class="clear-btn" onclick="clearSearch()" hidden>&times;</button>
         
         <!-- Autocomplete Dropdown List -->
@@ -699,11 +740,11 @@
       <!-- Category Filter Pills -->
       <div class="filter-pills" id="filterPills">
         <button class="pill active" data-category="all" onclick="filterCategory('all', event)">✨ All Places</button>
-        <button class="pill" data-category="academics" onclick="filterCategory('Academic', event)">🎓 Academics</button>
-        <button class="pill" data-category="facilities" onclick="filterCategory('Amenity', event)">🏢 Facilities</button>
-        <button class="pill" data-category="food" onclick="filterCategory('Food', event)">🍕 Food & Hubs</button>
-        <button class="pill" data-category="hostels" onclick="filterCategory('Hostel', event)">🏠 Hostels</button>
-        <button class="pill" data-category="emergency" onclick="filterCategory('Sports', event)">🚨 Emergency</button>
+        <button class="pill" data-category="Academic" onclick="filterCategory('Academic', event)">🎓 Academics</button>
+        <button class="pill" data-category="Amenity" onclick="filterCategory('Amenity', event)">🏢 Facilities</button>
+        <button class="pill" data-category="Food" onclick="filterCategory('Food', event)">🍕 Food & Hubs</button>
+        <button class="pill" data-category="Hostel" onclick="filterCategory('Hostel', event)">🏠 Hostels</button>
+        <button class="pill" data-category="Emergency" onclick="filterCategory('Emergency', event)">🚨 Emergency</button>
       </div>
     </div>
 
@@ -748,10 +789,10 @@
           </div>
           <div class="accordion-body">
             <ul class="subpart-list">
-              <li onclick="selectFromAutocomplete('ab1')">AB-1 Ground Floor Admin Block 📍</li>
-              <li onclick="selectFromAutocomplete('ab1')">Central Library (AB-1 First Floor) 📍</li>
-              <li onclick="selectFromAutocomplete('ab2')">AB-2 Main Departmental Classrooms 📍</li>
-              <li onclick="selectFromAutocomplete('lab_complex')">Engineering & CS Practical Labs 📍</li>
+              <li onclick="selectFromAutocomplete('ab1')">AB-1 Ground Floor Admin & IT Block (AB213) 📍</li>
+              <li onclick="selectFromAutocomplete('ab1')">Central Library & COE Cabin 📍</li>
+              <li onclick="selectFromAutocomplete('ab2')">AB-2 Lecture Halls & Faculty Cabins 📍</li>
+              <li onclick="selectFromAutocomplete('lab_complex')">Lab Complex & Interview Rooms 📍</li>
               <li onclick="selectFromAutocomplete('architecture')">School of Architecture Studio 📍</li>
             </ul>
           </div>
@@ -762,15 +803,17 @@
           <div class="accordion-header" onclick="toggleAccordion('secFacilities')">
             <span>🏢</span>
             <h4>2. Amenities & Guidance</h4>
-            <span class="badge-count">4 Amenities</span>
+            <span class="badge-count">6 Amenities</span>
             <span class="chevron">▼</span>
           </div>
           <div class="accordion-body">
             <ul class="subpart-list">
-              <li onclick="selectFromAutocomplete('special_block')">Special Block 📍</li>
-              <li onclick="selectFromAutocomplete('mph_lion_pharmacy')">Pharmacy & Medical Center 📍</li>
-              <li onclick="selectFromAutocomplete('parcel_pickup')">Parcel Pickup Hub 📍</li>
-              <li onclick="selectFromAutocomplete('open_auditorium')">Open-Air Amphitheater 📍</li>
+              <li onclick="selectFromAutocomplete('special_block')">Special Block & Food Court 📍</li>
+              <li onclick="selectFromAutocomplete('mph_lion_pharmacy')">MPH, Medical Center & Indoor Games 📍</li>
+              <li onclick="selectFromAutocomplete('parcel_pickup')">Parcel Pickup Hub (Amazon, Flipkart) 📍</li>
+              <li onclick="selectFromAutocomplete('open_auditorium')">Open Auditorium (Ganesh Chaturthi, Parties) 📍</li>
+              <li onclick="selectFromAutocomplete('gate_2')">VIT Main Gate 1 📍</li>
+              <li onclick="selectFromAutocomplete('gate_1')">VIT Main Gate 2 📍</li>
             </ul>
           </div>
         </div>
@@ -785,9 +828,8 @@
           </div>
           <div class="accordion-body">
             <ul class="subpart-list">
-              <li onclick="selectFromAutocomplete('mph_lion_pharmacy')">Campus Medical Center 📍</li>
-              <li onclick="selectFromAutocomplete('gate_2')">Main Gate Security Desk 📍</li>
-              <li onclick="selectFromAutocomplete('ab1')">IT Desk / Admin Helpline 📍</li>
+              <li onclick="selectFromAutocomplete('mph_lion_pharmacy')">Dr. Morphen Medical Center & Pharmacy 📍</li>
+              <li onclick="selectFromAutocomplete('ab1')">IT Dept Desk (AB213) 📍</li>
             </ul>
           </div>
         </div>
@@ -798,12 +840,12 @@
         <h3>📞 Emergency Contacts & Services</h3>
         <div class="contacts-grid">
           <div class="contact-item">
-            <strong>Fees Related Issues</strong>
-            <span>+91 7024181841 | feescollection@vitbhopal.ac.in</span>
+            <strong>Dr. Morphen's Clinic & Pharmacy</strong>
+            <span>Located @ Multi Purpose Hall (MPH)</span>
           </div>
           <div class="contact-item">
-            <strong>Admissions Helpline</strong>
-            <span>+91 7024181820 | info@vitbhopal.ac.in</span>
+            <strong>IT Department (All College IT)</strong>
+            <span>Cabin No: AB213 @ Academic Block 1</span>
           </div>
         </div>
       </div>
@@ -820,7 +862,7 @@
       <button class="close-chat" onclick="toggleChatbot()">✕</button>
     </div>
     <div class="chat-messages" id="chatMessages">
-      <div class="chat-msg bot">Hello! How can I help you find a place or service today?</div>
+      <div class="chat-msg bot">Hello! Ask me about AB1, AB2, Special Block, Football Ground, Boys Hostels, or Girls Hostel!</div>
     </div>
     <div class="chat-input-area">
       <input type="text" id="chatInput" placeholder="Ask a question (e.g., Where is Special Block?)..." onkeypress="handleChatKeyPress(event)">
@@ -833,24 +875,6 @@
 
   <!-- Application Logic Script -->
   <script>
-    /* Knowledge Base & Multi-language Keyword Data Engine */
-    const locationData = [
-      {
-        id: "p1",
-        name: "Central Cafeteria",
-        category: "food",
-        functionality: "Offers hot meals, beverages, snacks, and indoor seating.",
-        keywords: ["eat", "food", "cafeteria", "lunch", "dinner", "breakfast", "dine", "snack", "canteen", "khana", "khao", "bhookh"]
-      },
-      {
-        id: "special_block",
-        name: "Special Block",
-        category: "food",
-        functionality: "Special block facility, food stalls, coffee shops, and grab-and-go meals.",
-        keywords: ["special block", "special", "block", "eat", "food", "court", "coffee", "tea", "burger", "pizza", "khana", "chai"]
-      }
-    ];
-
     // Theme Toggle
     function toggleTheme() {
       const body = document.body;
@@ -866,14 +890,14 @@
 
     // Freshers Tour Trigger
     function startFreshersTour() {
-      const tourLocations = ['gate_2', 'ab1', 'ab2', 'special_block', 'all_boys_hostels'];
+      const tourLocations = ['gate_2', 'ab1', 'ab2', 'lab_complex', 'architecture', 'mph_lion_pharmacy', 'special_block', 'football_ground', 'cricket_ground', 'boys_hostel_1', 'girls_hostel'];
       let idx = 0;
       
       const nextStop = () => {
         if (idx < tourLocations.length) {
           selectFromAutocomplete(tourLocations[idx]);
           idx++;
-          setTimeout(nextStop, 3500);
+          setTimeout(nextStop, 4000);
         }
       };
       nextStop();
@@ -885,22 +909,36 @@
       item.classList.toggle('expanded');
     }
 
-    // Slide Panel Controls
+    // Slide Panel Controls & Fast Backtrack FAB Trigger
     function openPanel() {
       document.getElementById('detailPanel').classList.add('active');
+      document.getElementById('quickBackBtn').classList.add('visible');
     }
 
     function closePanel() {
       document.getElementById('detailPanel').classList.remove('active');
+      document.getElementById('quickBackBtn').classList.remove('visible');
+    }
+
+    // Instant Backtrack Function: Closes panel, clears selection state & recenters map smoothly
+    function quickBackToMap() {
+      closePanel();
+      map.flyTo(VIT_BHOPAL_CENTER, 16);
+      if (document.activeElement) {
+        document.activeElement.blur();
+      }
     }
 
     // SVG Icon Definitions
     const iconsSVG = {
       book: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`,
-      food: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2v10M18 12h-3v10M21 12h-3M3 2v6a3 3 0 0 0 3 h0a3 3 0 0 0 3-3V2M6 11v11"/></svg>`,
+      food: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`,
       bed: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h20v12M2 17h20M6 8v3M10 8v3"/></svg>`,
       sports: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20M2 12h20"/></svg>`,
-      amenity: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`
+      amenity: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
+      emergency: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg>`,
+      gate: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V3h18v18"/><path d="M18 21v-8a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v8"/><circle cx="15" cy="16" r="1"/></svg>`,
+      parcel: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>`
     };
 
     function createCustomIcon(type, iconSvg) {
@@ -918,7 +956,10 @@
       food: createCustomIcon('food', iconsSVG.food),
       hostel: createCustomIcon('hostel', iconsSVG.bed),
       sports: createCustomIcon('sports', iconsSVG.sports),
-      amenity: createCustomIcon('amenity', iconsSVG.amenity)
+      amenity: createCustomIcon('amenity', iconsSVG.amenity),
+      emergency: createCustomIcon('emergency', iconsSVG.emergency),
+      gate: createCustomIcon('gate', iconsSVG.gate),
+      parcel: createCustomIcon('parcel', iconsSVG.parcel)
     };
 
     // Reference Coordinates
@@ -946,25 +987,193 @@
 
     // Campus Master Locations Data
     const campusData = [
-      { id: "ab1", name: "Academic Block - 1", category: "Academic", iconType: "academic", lat: 23.077533, lng: 76.851404, landmark: "Central administrative offices & main library building.", hostelWalkTime: "13-15 min", ab1WalkTime: "0 min" },
-      { id: "ab2", name: "Academic Block - 2", category: "Academic", iconType: "academic", lat: 23.073653, lng: 76.855719, landmark: "Main academic block for classes & departmental labs.", hostelWalkTime: "7-9 min", ab1WalkTime: "10 min" },
-      { id: "lab_complex", name: "Lab Complex", category: "Academic", iconType: "academic", lat: 23.078600, lng: 76.849959, landmark: "Specialized engineering & computer science practical labs.", hostelWalkTime: "14-16 min", ab1WalkTime: "3 min" },
-      { id: "architecture", name: "Architecture Building", category: "Academic", iconType: "academic", lat: 23.078096, lng: 76.850202, landmark: "School of Architecture complex near the lab wing.", hostelWalkTime: "14-16 min", ab1WalkTime: "2 min" },
-      { id: "boys_hostel_1", name: "Boys Hostel Block - 1", category: "Hostel", iconType: "hostel", lat: 23.075439, lng: 76.859820, landmark: "Primary residential block for boys.", hostelWalkTime: "2 min", ab1WalkTime: "13-15 min" },
-      { id: "all_boys_hostels", name: "All Boys Hostels", category: "Hostel", iconType: "hostel", lat: 23.073343, lng: 76.858988, landmark: "Residential cluster containing senior & junior boys hosteling blocks.", hostelWalkTime: "0 min", ab1WalkTime: "13-15 min" },
-      { id: "girls_hostel", name: "Girls Hostel", category: "Hostel", iconType: "hostel", lat: 23.075075, lng: 76.853110, landmark: "Secured girls residential complex.", hostelWalkTime: "8 min", ab1WalkTime: "6 min" },
-      { id: "faculty_house", name: "Faculty House", category: "Hostel", iconType: "hostel", lat: 23.071239, lng: 76.862288, landmark: "Staff and faculty residential quarters.", hostelWalkTime: "5 min", ab1WalkTime: "18 min" },
-      { id: "special_block", name: "Special Block", category: "Food", iconType: "food", lat: 23.072532, lng: 76.857736, landmark: "Multi-cuisine student special block area and snack shops.", hostelWalkTime: "3 min", ab1WalkTime: "12 min" },
-      { id: "safal_jmb_mess", name: "Safal Mess & JMB Mess", category: "Food", iconType: "food", lat: 23.072424, lng: 76.859578, landmark: "Main hostel dining mess hall.", hostelWalkTime: "2 min", ab1WalkTime: "14 min" },
-      { id: "mayuri_mess", name: "Mayuri Mess", category: "Food", iconType: "food", lat: 23.073590, lng: 76.860230, landmark: "Hostel dining hall facility.", hostelWalkTime: "2 min", ab1WalkTime: "14 min" },
-      { id: "open_auditorium", name: "Open Auditorium", category: "Amenity", iconType: "amenity", lat: 23.074374, lng: 76.851067, landmark: "Open-air amphitheater for cultural events.", hostelWalkTime: "10 min", ab1WalkTime: "6 min" },
-      { id: "parcel_pickup", name: "Parcel Pickup", category: "Amenity", iconType: "amenity", lat: 23.074642, lng: 76.850098, landmark: "Courier and delivery parcel retrieval area.", hostelWalkTime: "11 min", ab1WalkTime: "7 min" },
-      { id: "chancellor_house", name: "Chancellor's House", category: "Amenity", iconType: "amenity", lat: 23.074874, lng: 76.851380, landmark: "Executive residence wing.", hostelWalkTime: "10 min", ab1WalkTime: "6 min" },
-      { id: "mph_lion_pharmacy", name: "Multi Purpose Hall & Pharmacy", category: "Amenity", iconType: "amenity", lat: 23.076156, lng: 76.849873, landmark: "Includes medical store, lion landmark statue, and event hall.", hostelWalkTime: "12 min", ab1WalkTime: "8 min" },
-      { id: "gate_1", name: "VIT Main Gate 2", category: "Amenity", iconType: "amenity", lat: 23.084526, lng: 76.849599, landmark: "Primary campus entry gate off the highway.", hostelWalkTime: "25 min", ab1WalkTime: "18 min" },
-      { id: "gate_2", name: "VIT Main Gate 1", category: "Amenity", iconType: "amenity", lat: 23.075473, lng: 76.849643, landmark: "Secondary security gate checkpoint.", hostelWalkTime: "12 min", ab1WalkTime: "8 min" },
-      { id: "cricket_ground", name: "Cricket Ground", category: "Sports", iconType: "sports", lat: 23.074413, lng: 76.853938, landmark: "Outdoor cricket ground.", hostelWalkTime: "6 min", ab1WalkTime: "8 min" },
-      { id: "football_ground", name: "Football Ground", category: "Sports", iconType: "sports", lat: 23.074650, lng: 76.855858, landmark: "Full-size football field.", hostelWalkTime: "4 min", ab1WalkTime: "9 min" }
+      { 
+        id: "ab1", 
+        name: "Academic Block - 1", 
+        category: "Academic", 
+        iconType: "academic", 
+        lat: 23.077533, 
+        lng: 76.851404, 
+        landmark: "Here we study, execute events, meetings, proctor meetings, give tests, quizzes. There are several cabins allocated to different faculty. Controller of examination cabin is in this building. The IT department for the whole college is located here (cabin no: AB213).", 
+        hostelWalkTime: "13-15 min", 
+        ab1WalkTime: "0 min" 
+      },
+      { 
+        id: "ab2", 
+        name: "Academic Block - 2", 
+        category: "Academic", 
+        iconType: "academic", 
+        lat: 23.073653, 
+        lng: 76.855719, 
+        landmark: "Here students attend major departmental classes, lectures, and academic discussions. It houses modern classrooms, multiple faculty cabins across floors, and specialized study areas where tests, quizzes, and academic coordination take place every day.", 
+        hostelWalkTime: "7-9 min", 
+        ab1WalkTime: "10 min" 
+      },
+      { 
+        id: "lab_complex", 
+        name: "Lab Complex", 
+        category: "Academic", 
+        iconType: "academic", 
+        lat: 23.078600, 
+        lng: 76.849959, 
+        landmark: "This is the main hub for those who love practical implementations. We have several labs in this building which includes Aerospace engineering (uses a real aircraft for explanation of concepts), Robotics lab, and Gaming lab. The most important thing is that placement classes and all interviews from all kinds of companies happen in this building. This building has its own AURA.", 
+        hostelWalkTime: "14-16 min", 
+        ab1WalkTime: "3 min" 
+      },
+      { 
+        id: "architecture", 
+        name: "Architecture Building", 
+        category: "Academic", 
+        iconType: "academic", 
+        lat: 23.078096, 
+        lng: 76.850202, 
+        landmark: "Here all the civil engineers have their classes and various practicals related to real-world situations.", 
+        hostelWalkTime: "14-16 min", 
+        ab1WalkTime: "2 min" 
+      },
+      { 
+        id: "boys_hostel_1", 
+        name: "Boys Hostel Block - 1", 
+        category: "Hostel", 
+        iconType: "hostel", 
+        lat: 23.075439, 
+        lng: 76.859820, 
+        landmark: "Here the boy students of the campus stay who have opted for hostel services. It is a lively residential block equipped with essential amenities, study spaces, and easy access to nearby dining mess halls.", 
+        hostelWalkTime: "2 min", 
+        ab1WalkTime: "13-15 min" 
+      },
+      { 
+        id: "all_boys_hostels", 
+        name: "All Boys Hostels", 
+        category: "Hostel", 
+        iconType: "hostel", 
+        lat: 23.073343, 
+        lng: 76.858988, 
+        landmark: "This entire residential cluster houses all the boy students across different hostel blocks who have opted for hostel services. It includes recreational spaces, mess dining areas, and night canteen facilities for late-night study sessions.", 
+        hostelWalkTime: "0 min", 
+        ab1WalkTime: "13-15 min" 
+      },
+      { 
+        id: "girls_hostel", 
+        name: "Girls Hostel", 
+        category: "Hostel", 
+        iconType: "hostel", 
+        lat: 23.0750236, 
+        lng: 76.8531026, 
+        landmark: "Here all the student girls of the campus who have opted for hostel services stay. Includes dining services (Mayuri Mess and AB Catering Mess) and various amenities inside the hostel like a badminton court etc.", 
+        hostelWalkTime: "8 min", 
+        ab1WalkTime: "6 min" 
+      },
+      { 
+        id: "special_block", 
+        name: "Special Block", 
+        category: "Food", 
+        iconType: "food", 
+        lat: 23.072532, 
+        lng: 76.857736, 
+        landmark: "This is a major hangout hub on campus! Various club meetings and student discussions basically take place over here. It features a bustling food court area with multiple eateries and fast-food outlets, and also includes a separate girls block for added convenience and comfort.", 
+        hostelWalkTime: "3 min", 
+        ab1WalkTime: "12 min" 
+      },
+      { 
+        id: "safal_jmb_mess", 
+        name: "Safal Mess & JMB Mess", 
+        category: "Food", 
+        iconType: "food", 
+        lat: 23.072424, 
+        lng: 76.859578, 
+        landmark: "Main hostel dining mess hall providing daily meals to hostellers.", 
+        hostelWalkTime: "2 min", 
+        ab1WalkTime: "14 min" 
+      },
+      { 
+        id: "mayuri_mess", 
+        name: "Mayuri Mess", 
+        category: "Food", 
+        iconType: "food", 
+        lat: 23.073590, 
+        lng: 76.860230, 
+        landmark: "Hostel dining hall facility for daily meals.", 
+        hostelWalkTime: "2 min", 
+        ab1WalkTime: "14 min" 
+      },
+      { 
+        id: "open_auditorium", 
+        name: "Open Auditorium", 
+        category: "Amenity", 
+        iconType: "amenity", 
+        lat: 23.074374, 
+        lng: 76.851067, 
+        landmark: "Here all the events like Ganesh Chaturthi, dance parties, and cultural gatherings take place.", 
+        hostelWalkTime: "10 min", 
+        ab1WalkTime: "6 min" 
+      },
+      { 
+        id: "parcel_pickup", 
+        name: "Parcel Pickup Hub", 
+        category: "Amenity", 
+        iconType: "parcel", 
+        lat: 23.074642, 
+        lng: 76.850098, 
+        landmark: "Here students can pick up their parcels from various delivery companies like Amazon, Flipkart, etc.", 
+        hostelWalkTime: "11 min", 
+        ab1WalkTime: "7 min" 
+      },
+      { 
+        id: "mph_lion_pharmacy", 
+        name: "Multipurpose Hall, Lion Statue & Pharmacy", 
+        category: "Emergency", 
+        iconType: "emergency", 
+        lat: 23.076156, 
+        lng: 76.849873, 
+        landmark: "This is the place where all the mechanical engineers work on themselves and all club meetings basically take place over here. It is very special as all health-related issues of students are treated at Dr. Morphen's and there is a pharmacy store beside it. This place also has various indoor games like badminton, basketball, and table tennis.", 
+        hostelWalkTime: "12 min", 
+        ab1WalkTime: "8 min" 
+      },
+      { 
+        id: "gate_1", 
+        name: "VIT Main Gate 2", 
+        category: "Amenity", 
+        iconType: "gate", 
+        lat: 23.084526, 
+        lng: 76.849599, 
+        landmark: "Primary campus entry gate off the highway with 24/7 security.", 
+        hostelWalkTime: "25 min", 
+        ab1WalkTime: "18 min" 
+      },
+      { 
+        id: "gate_2", 
+        name: "VIT Main Gate 1", 
+        category: "Amenity", 
+        iconType: "gate", 
+        lat: 23.075473, 
+        lng: 76.849643, 
+        landmark: "Secondary security gate checkpoint & main entry.", 
+        hostelWalkTime: "12 min", 
+        ab1WalkTime: "8 min" 
+      },
+      { 
+        id: "cricket_ground", 
+        name: "Cricket Ground", 
+        category: "Sports", 
+        iconType: "sports", 
+        lat: 23.074413, 
+        lng: 76.853938, 
+        landmark: "It is the most favourite part of the campus. Here all the tournaments like Aarambh take place where many cricket teams compete against each other, and big events like adVITya take place—basically a 5-day annual event where big superstars of singing and the Bollywood industry perform in front of students.", 
+        hostelWalkTime: "6 min", 
+        ab1WalkTime: "8 min" 
+      },
+      { 
+        id: "football_ground", 
+        name: "Football Ground", 
+        category: "Sports", 
+        iconType: "sports", 
+        lat: 23.074650, 
+        lng: 76.855858, 
+        landmark: "This is the big ground of the campus where students gather for intense football matches, outdoor sports practice, and major athletic activities. It serves as a energetic open space right next to the hostel zone for sports enthusiasts.", 
+        hostelWalkTime: "4 min", 
+        ab1WalkTime: "9 min" 
+      }
     ];
 
     let markerMap = {};
@@ -985,7 +1194,7 @@
       });
 
       if (autoRelocate && data.length > 0) {
-        map.flyTo([data[0].lat, data[0].lng], 16);
+        map.flyTo([data[0].lat, data[0].lng], 17);
       }
     }
 
@@ -1018,7 +1227,6 @@
         markerMap[place.id].openPopup();
       }
 
-      // Open side details panel
       openPanel();
     }
 
@@ -1041,6 +1249,12 @@
       } else {
         const filtered = campusData.filter(p => p.category === category);
         renderMarkers(filtered, true);
+        
+        // Auto-select medical center when clicking emergency
+        if (category === 'Emergency' && filtered.length > 0) {
+          const mainEmergency = filtered.find(p => p.id === 'mph_lion_pharmacy') || filtered[0];
+          selectPlace(mainEmergency);
+        }
       }
     }
 
@@ -1131,8 +1345,9 @@
 
       campusData.forEach(place => {
         const pName = place.name.toLowerCase();
+        const pLandmark = place.landmark.toLowerCase();
         words.forEach(word => {
-          if (word.length >= 2 && (pName.includes(word) || place.id.toLowerCase().includes(word))) {
+          if (word.length >= 3 && (pName.includes(word) || pLandmark.includes(word) || place.id.toLowerCase().includes(word))) {
             matchedPlaces.add({ name: place.name, functionality: place.landmark });
           }
         });
@@ -1140,7 +1355,7 @@
 
       const results = Array.from(matchedPlaces);
       if (results.length === 0) {
-        return "I couldn't find a place matching that. Try asking about AB-1, Hostels, Mess, or Pharmacy!";
+        return "I couldn't find a place matching that. Try asking about AB-1, AB-2, Special Block, Football Ground, or Girls Hostel!";
       }
 
       let responseStr = `Matches found:<br><ul style="margin: 6px 0; padding-left: 16px;">`;
