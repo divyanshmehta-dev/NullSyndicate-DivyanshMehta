@@ -43,7 +43,7 @@ An interactive, single-page web app that helps students and visitors navigate th
 | Team Lead | Divyansh Mehta|
 | Member | Aryan Uday Kansagara |
 | Member | Abhinav Jain |
-| Member | Bhavya Vyas |
+| Member | Bhavya Gaurang Vyas |
 
 
 ## 📌 Status
