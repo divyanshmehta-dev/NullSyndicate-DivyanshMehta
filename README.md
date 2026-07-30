@@ -17,7 +17,6 @@ An interactive, single-page web app that helps students and visitors navigate th
 
 - **HTML5 / CSS3** – Layout, theming (CSS variables), animations
 - **Vanilla JavaScript** – App logic, search, filtering, chatbot engine
-- **Leaflet.js** – Interactive map rendering and geolocation markers
 - **No frameworks / no backend** – Runs entirely in the browser
 
 ## 📂 Project Structure
@@ -48,4 +47,4 @@ An interactive, single-page web app that helps students and visitors navigate th
 
 ## 📌 Status
 
-🚧 Work in progress — built for [hackathon/event name]. Core map, search, filtering, and chatbot features are functional. Upcoming: real-time pathfinding/routing between locations, and mobile optimization.
+🚧 Work in progress — built for **SUMMER OF CODE 2.0**. Core map, search, filtering, and chatbot features are functional. Upcoming: real-time pathfinding/routing between locations, and mobile optimization.
