@@ -73,29 +73,20 @@
       overflow: hidden;
       background-color: var(--bg-primary);
       color: var(--text-main);
-      display: flex;
     }
 
-    /* Main Container: Split View */
+    /* Main Full-Screen Map Container */
     .app-container {
-      display: flex;
       width: 100vw;
       height: 100vh;
       position: relative;
     }
 
-    /* Left Map Container (35% Width) */
-    .map-section {
-      position: relative;
-      width: 35%;
-      height: 100%;
-      border-right: 2px solid var(--border-color);
-    }
-
     #map {
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       background: #111;
+      z-index: 1;
     }
 
     /* Radium Glow Icon Pin Styling */
@@ -119,17 +110,17 @@
     .custom-svg-icon.sports { background: #059669; color: #00ff66; box-shadow: 0 0 12px rgba(0, 255, 102, 0.8); }
     .custom-svg-icon.amenity { background: #475569; color: #ffffff; box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
 
-    /* Search & Filter Component Styles */
-    .search-container {
+    /* Floating Search & Top Navigation Overlay */
+    .top-floating-bar {
       position: absolute;
       top: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      width: 92%;
+      left: 20px;
+      z-index: 1500;
+      width: 420px;
+      max-width: calc(100vw - 40px);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     .search-input-wrapper {
@@ -138,10 +129,10 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      box-shadow: var(--glow-active);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
       display: flex;
       align-items: center;
-      padding: 4px 12px;
+      padding: 6px 14px;
     }
 
     .search-input-wrapper input {
@@ -171,16 +162,16 @@
     /* Autocomplete Dropdown List */
     .autocomplete-list {
       position: absolute;
-      top: calc(100% + 4px);
+      top: calc(100% + 6px);
       left: 0;
       right: 0;
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      max-height: 200px;
+      max-height: 240px;
       overflow-y: auto;
-      z-index: 1001;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      z-index: 1501;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
       display: none;
     }
 
@@ -226,13 +217,14 @@
     .pill {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      padding: 5px 10px;
+      padding: 6px 12px;
       border-radius: 20px;
       font-size: 11px;
       font-weight: 600;
       color: var(--text-main);
       cursor: pointer;
       white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       transition: all 0.2s ease;
     }
 
@@ -243,26 +235,29 @@
       font-weight: 700;
     }
 
-    /* Action Buttons Bar */
-    .nav-actions {
+    /* Header Controls Container (Top Right) */
+    .top-right-controls {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      z-index: 1500;
       display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .btn {
       border: 1px solid var(--border-color);
-      padding: 6px 12px;
-      border-radius: 8px;
+      padding: 8px 14px;
+      border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       background: var(--bg-card);
       color: var(--text-main);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     .btn-tour {
@@ -271,65 +266,82 @@
       border-color: var(--radium-purple);
     }
 
-    .slideshow-trigger-btn {
-      background: var(--radium-green);
-      color: #000;
-      box-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
-    }
-
-    /* Theme Toggle Button */
     .theme-toggle-btn {
-      background: var(--bg-subcard);
+      background: var(--bg-card);
       border: 1px solid var(--accent-active);
       color: var(--text-main);
-      padding: 6px 14px;
+      padding: 8px 14px;
       border-radius: 20px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
       cursor: pointer;
       box-shadow: var(--glow-active);
       white-space: nowrap;
     }
 
-    /* Right Information & Student Dashboard (65% Width) */
-    .info-section {
-      width: 65%;
-      height: 100%;
+    /* SLIDE-OVER DETAILS PANEL (Appears when location icon is clicked) */
+    .slide-over-panel {
+      position: fixed;
+      top: 0;
+      right: -480px; /* Hidden off-screen by default */
+      width: 450px;
+      max-width: 100vw;
+      height: 100vh;
       background: var(--bg-primary);
+      border-left: 2px solid var(--border-color);
+      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+      z-index: 2500;
+      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
       overflow-y: auto;
-      padding: 28px;
-      gap: 22px;
+      padding: 24px;
+      gap: 20px;
     }
 
-    .info-header {
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 14px;
+    .slide-over-panel.active {
+      right: 0; /* Slide into view */
+    }
+
+    .panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 12px;
     }
 
-    .info-header h1 {
-      font-size: 24px;
+    .panel-header h1 {
+      font-size: 20px;
       color: var(--text-main);
-      text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
     }
 
-    .info-header p {
-      font-size: 13px;
-      color: var(--text-sub);
-      margin-top: 4px;
+    .close-panel-btn {
+      background: var(--bg-subcard);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* Selected Place Details Card */
+    .close-panel-btn:hover {
+      background: var(--accent-active);
+      color: #000;
+    }
+
+    /* Location Details Card */
     .details-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-left: 5px solid var(--accent-active);
       border-radius: 12px;
-      padding: 20px;
+      padding: 18px;
       box-shadow: var(--glow-active);
     }
 
@@ -346,9 +358,9 @@
       background: var(--bg-subcard);
       color: var(--accent-active);
       border: 1px solid var(--accent-active);
-      padding: 4px 12px;
+      padding: 4px 10px;
       border-radius: 6px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
     }
@@ -360,22 +372,22 @@
       background: rgba(0, 255, 102, 0.1);
       color: var(--radium-green);
       border: 1px solid var(--radium-green);
-      padding: 4px 12px;
+      padding: 4px 10px;
       border-radius: 6px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
     }
 
     .details-card h2 {
-      font-size: 22px;
+      font-size: 20px;
       color: var(--text-main);
       margin-bottom: 8px;
     }
 
     .details-card p {
-      font-size: 15px;
+      font-size: 14px;
       color: var(--text-sub);
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     /* Drawer / Accordion Section Styles */
@@ -383,14 +395,14 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 20px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .section-heading {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.5px;
       color: var(--text-sub);
@@ -405,7 +417,7 @@
     }
 
     .accordion-header {
-      padding: 12px 16px;
+      padding: 10px 14px;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -415,13 +427,13 @@
 
     .accordion-header h4 {
       flex-grow: 1;
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-main);
     }
 
     .badge-count {
-      font-size: 11px;
-      padding: 2px 8px;
+      font-size: 10px;
+      padding: 2px 6px;
       border-radius: 10px;
       background: var(--bg-primary);
       color: var(--accent-active);
@@ -440,7 +452,7 @@
 
     .accordion-body {
       display: none;
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-top: 1px solid var(--border-color);
       background: var(--bg-card);
     }
@@ -453,14 +465,13 @@
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
-    /* Enhanced Clickable Data Items */
     .subpart-list li {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-sub);
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 6px;
       background: var(--bg-subcard);
       border: 1px solid var(--border-color);
@@ -474,54 +485,39 @@
     .subpart-list li:hover {
       color: var(--accent-active);
       border-color: var(--accent-active);
-      box-shadow: var(--glow-active);
-      transform: translateX(4px);
     }
 
-    /* Student Useful Info Widgets */
+    /* Student Emergency Contacts Widget */
     .widget {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 20px;
+      padding: 16px;
     }
 
     .widget h3 {
-      font-size: 17px;
+      font-size: 15px;
       color: var(--text-main);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      margin-bottom: 10px;
     }
 
     .contacts-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    /* Clickable Contact Cards */
     .contact-item {
       background: var(--bg-subcard);
-      padding: 12px 16px;
+      padding: 10px 12px;
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 12px;
       border: 1px solid var(--border-color);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .contact-item:hover {
-      border-color: var(--accent-active);
-      box-shadow: var(--glow-active);
-      transform: translateY(-2px);
     }
 
     .contact-item strong {
       display: block;
       color: var(--text-main);
-      font-size: 14px;
       margin-bottom: 2px;
     }
 
@@ -529,98 +525,13 @@
       color: var(--text-sub);
     }
 
-    /* Modal Slideshow Styles */
-    .slideshow-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .slideshow-modal.active {
-      display: flex;
-    }
-
-    .slideshow-container {
-      position: relative;
-      width: 90%;
-      max-width: 700px;
-      background: #000;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 2px solid var(--radium-cyan);
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
-    }
-
-    .slide {
-      display: none;
-      text-align: center;
-    }
-
-    .slide.active {
-      display: block;
-    }
-
-    .slide img {
-      width: 100%;
-      height: 380px;
-      object-fit: cover;
-    }
-
-    .slide-caption {
-      padding: 12px;
-      background: #111;
-      color: var(--radium-cyan);
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .slide-nav {
-      position: absolute;
-      top: 45%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 10px;
-      transform: translateY(-50%);
-    }
-
-    .nav-arrow {
-      background: var(--radium-cyan);
-      color: #000;
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 20px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 10px var(--radium-cyan);
-    }
-
-    .close-slideshow {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      color: var(--radium-pink);
-      font-size: 30px;
-      cursor: pointer;
-      z-index: 2100;
-    }
-
     /* Floating Chatbot Widget Styles */
     .chat-widget-toggle {
       position: fixed;
       bottom: 25px;
       right: 25px;
-      width: 60px;
-      height: 60px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       background: var(--accent-active);
       color: #000;
@@ -631,7 +542,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 26px;
+      font-size: 24px;
       transition: transform 0.2s ease;
     }
 
@@ -641,11 +552,11 @@
 
     .chat-container-popup {
       position: fixed;
-      bottom: 95px;
+      bottom: 90px;
       right: 25px;
-      width: 380px;
+      width: 360px;
       max-width: 90vw;
-      height: 520px;
+      height: 480px;
       max-height: 80vh;
       background: var(--chat-bg);
       border: 2px solid var(--accent-active);
@@ -663,7 +574,7 @@
 
     .chat-header {
       background: var(--bg-subcard);
-      padding: 14px 18px;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
@@ -671,7 +582,7 @@
     }
 
     .chat-header h3 {
-      font-size: 15px;
+      font-size: 14px;
       color: var(--text-main);
       display: flex;
       align-items: center;
@@ -682,24 +593,24 @@
       background: none;
       border: none;
       color: var(--text-sub);
-      font-size: 20px;
+      font-size: 18px;
       cursor: pointer;
     }
 
     .chat-messages {
       flex: 1;
-      padding: 16px;
+      padding: 14px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .chat-msg {
-      max-width: 82%;
-      padding: 10px 14px;
-      border-radius: 14px;
-      font-size: 13px;
+      max-width: 85%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 12px;
       line-height: 1.4;
       word-wrap: break-word;
     }
@@ -721,46 +632,48 @@
     }
 
     .chat-input-area {
-      padding: 12px;
+      padding: 10px;
       border-top: 1px solid var(--border-color);
       background: var(--bg-subcard);
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }
 
     .chat-input-area input {
       flex: 1;
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      padding: 10px 12px;
+      padding: 8px 10px;
       border-radius: 8px;
       color: var(--text-main);
       outline: none;
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .chat-input-area button {
       background: var(--accent-active);
       color: #000;
       border: none;
-      padding: 0 16px;
+      padding: 0 14px;
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    /* Responsive Mobile View Adjustment */
-    @media (max-width: 900px) {
-      .app-container {
-        flex-direction: column;
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+      .top-floating-bar {
+        width: calc(100vw - 30px);
+        left: 15px;
       }
-      .map-section {
-        width: 100%;
-        height: 40vh;
+      .top-right-controls {
+        top: auto;
+        bottom: 25px;
+        left: 15px;
+        right: auto;
       }
-      .info-section {
-        width: 100%;
-        height: 60vh;
+      .slide-over-panel {
+        width: 100vw;
       }
     }
   </style>
@@ -769,54 +682,48 @@
 
   <div class="app-container">
     
-    <!-- LEFT SIDE: MAP SECTION (35% Width) -->
-    <div class="map-section">
-      <header class="search-container">
-        <!-- Integrated Search Input Wrapper -->
-        <div class="search-input-wrapper">
-          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="searchInput" placeholder="Search buildings, labs, landmarks (e.g. AB 1, AI Lab)..." autocomplete="off" oninput="handleSearchInput()">
-          <button id="clearSearchBtn" class="clear-btn" onclick="clearSearch()" hidden>&times;</button>
-          
-          <!-- Autocomplete Dropdown List -->
-          <div id="autocompleteList" class="autocomplete-list"></div>
-        </div>
+    <!-- FULL SCREEN MAP canvas -->
+    <div id="map"></div>
+
+    <!-- FLOATING TOP SEARCH BAR & FILTERS OVERLAY -->
+    <div class="top-floating-bar">
+      <div class="search-input-wrapper">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="searchInput" placeholder="Search buildings, labs, landmarks (e.g. AB 1, AI Lab)..." autocomplete="off" oninput="handleSearchInput()">
+        <button id="clearSearchBtn" class="clear-btn" onclick="clearSearch()" hidden>&times;</button>
         
-        <!-- Category Filter Pills -->
-        <div class="filter-pills" id="filterPills">
-          <button class="pill active" data-category="all" onclick="filterCategory('all', event)">✨ All Places</button>
-          <button class="pill slideshow-trigger-btn" onclick="openSlideshow()">🖼️ Gallery</button>
-          <button class="pill" data-category="academics" onclick="filterCategory('Academic', event)">🎓 Academics</button>
-          <button class="pill" data-category="facilities" onclick="filterCategory('Amenity', event)">🏢 Facilities</button>
-          <button class="pill" data-category="food" onclick="filterCategory('Food', event)">🍕 Food & Hubs</button>
-          <button class="pill" data-category="hostels" onclick="filterCategory('Hostel', event)">🏠 Hostels</button>
-          <button class="pill" data-category="emergency" onclick="filterCategory('Sports', event)">🚨 Emergency</button>
-        </div>
-
-        <!-- Integrated Action Toolbar -->
-        <div class="nav-actions">
-          <!-- First-Time Visitor Tour -->
-          <button class="btn btn-tour" id="tourBtn" onclick="startFreshersTour()">
-            <span>🌟 Freshers Tour</span>
-          </button>
-        </div>
-      </header>
-
-      <div id="map"></div>
+        <!-- Autocomplete Dropdown List -->
+        <div id="autocompleteList" class="autocomplete-list"></div>
+      </div>
+      
+      <!-- Category Filter Pills -->
+      <div class="filter-pills" id="filterPills">
+        <button class="pill active" data-category="all" onclick="filterCategory('all', event)">✨ All Places</button>
+        <button class="pill" data-category="academics" onclick="filterCategory('Academic', event)">🎓 Academics</button>
+        <button class="pill" data-category="facilities" onclick="filterCategory('Amenity', event)">🏢 Facilities</button>
+        <button class="pill" data-category="food" onclick="filterCategory('Food', event)">🍕 Food & Hubs</button>
+        <button class="pill" data-category="hostels" onclick="filterCategory('Hostel', event)">🏠 Hostels</button>
+        <button class="pill" data-category="emergency" onclick="filterCategory('Sports', event)">🚨 Emergency</button>
+      </div>
     </div>
 
-    <!-- RIGHT SIDE: STUDENT INFORMATION DASHBOARD (65% Width) -->
-    <div class="info-section">
+    <!-- FLOATING TOP RIGHT ACTIONS -->
+    <div class="top-right-controls">
+      <button class="btn btn-tour" id="tourBtn" onclick="startFreshersTour()">
+        <span>🌟 Freshers Tour</span>
+      </button>
+      <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">☀️ Light Mode</button>
+    </div>
+
+    <!-- SLIDE-OVER DETAIL SHEET (Triggers on Pin Click) -->
+    <div class="slide-over-panel" id="detailPanel">
       
-      <div class="info-header">
-        <div>
-          <h1>🎓 VIT Bhopal Student Navigator</h1>
-          <p>Enhanced Dashboard & Campus Guidance System</p>
-        </div>
-        <!-- Theme Toggle Button -->
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">☀️ Light Mode</button>
+      <div class="panel-header">
+        <h1>🎓 Campus Location Details</h1>
+        <button class="close-panel-btn" onclick="closePanel()">&times;</button>
       </div>
 
+      <!-- Selected Place Details -->
       <div class="details-card">
         <div class="badge-wrapper">
           <span id="placeCategory" class="badge">Select Location</span>
@@ -824,24 +731,24 @@
           <span id="ab2WalkBadge" class="walk-badge" style="display: none; background: rgba(0, 240, 255, 0.1); color: var(--radium-cyan); border-color: var(--radium-cyan);">🚶 -- min from AB-1</span>
         </div>
         <h2 id="placeTitle">Welcome to VIT Bhopal Nav</h2>
-        <p id="landmarkText">Select any building or landmark icon on the map to view exact details, visual cues, and realistic walking times.</p>
+        <p id="landmarkText">Click any building or landmark pin on the map to view detailed campus information for freshers.</p>
       </div>
 
-      <!-- Integrated Accordion Sub-Parts Section (All Made Clickable) -->
+      <!-- Accordion Sub-Parts Section -->
       <div class="drawer-sections">
-        <h3 class="section-heading">EXPLORE SUB-PARTS & ROOMS (CLICK TO LOCATE)</h3>
+        <h3 class="section-heading">EXPLORE SUB-PARTS & ROOMS</h3>
 
         <!-- Section 1: Academics -->
         <div class="accordion-item expanded" id="secAcademics">
           <div class="accordion-header" onclick="toggleAccordion('secAcademics')">
-            <span class="acc-icon">🎓</span>
+            <span>🎓</span>
             <h4>1. Academics & Departments</h4>
-            <span class="badge-count" id="countAcademics">5 Sub-parts</span>
+            <span class="badge-count">5 Sub-parts</span>
             <span class="chevron">▼</span>
           </div>
           <div class="accordion-body">
-            <ul class="subpart-list" id="listAcademics">
-              <li onclick="selectFromAutocomplete('ab1')">AB-1 Ground Floor Administrative Block 📍</li>
+            <ul class="subpart-list">
+              <li onclick="selectFromAutocomplete('ab1')">AB-1 Ground Floor Admin Block 📍</li>
               <li onclick="selectFromAutocomplete('ab1')">Central Library (AB-1 First Floor) 📍</li>
               <li onclick="selectFromAutocomplete('ab2')">AB-2 Main Departmental Classrooms 📍</li>
               <li onclick="selectFromAutocomplete('lab_complex')">Engineering & CS Practical Labs 📍</li>
@@ -853,13 +760,13 @@
         <!-- Section 2: Facilities -->
         <div class="accordion-item" id="secFacilities">
           <div class="accordion-header" onclick="toggleAccordion('secFacilities')">
-            <span class="acc-icon">🏢</span>
-            <h4>2. Amenities & Indoor Guidance</h4>
-            <span class="badge-count" id="countFacilities">4 Amenities</span>
+            <span>🏢</span>
+            <h4>2. Amenities & Guidance</h4>
+            <span class="badge-count">4 Amenities</span>
             <span class="chevron">▼</span>
           </div>
           <div class="accordion-body">
-            <ul class="subpart-list" id="listFacilities">
+            <ul class="subpart-list">
               <li onclick="selectFromAutocomplete('special_block')">Special Block 📍</li>
               <li onclick="selectFromAutocomplete('mph_lion_pharmacy')">Pharmacy & Medical Center 📍</li>
               <li onclick="selectFromAutocomplete('parcel_pickup')">Parcel Pickup Hub 📍</li>
@@ -868,33 +775,17 @@
           </div>
         </div>
 
-        <!-- Section 3: Events & Notices -->
-        <div class="accordion-item" id="secEvents">
-          <div class="accordion-header" onclick="toggleAccordion('secEvents')">
-            <span class="acc-icon">📢</span>
-            <h4>3. Live Events & Room Changes</h4>
-            <span class="badge-count" id="countEvents">2 Live</span>
-            <span class="chevron">▼</span>
-          </div>
-          <div class="accordion-body">
-            <ul class="subpart-list" id="listEvents">
-              <li onclick="selectFromAutocomplete('gate_1')">Shuttle Bus Active (Main Gate 2 ↔ AB-1 / AB-2) 📍</li>
-              <li onclick="selectFromAutocomplete('open_auditorium')">Hackathon Briefing @ Open Auditorium (5:00 PM) 📍</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Section 4: Emergency & Support -->
+        <!-- Section 3: Emergency & Support -->
         <div class="accordion-item" id="secEmergency">
           <div class="accordion-header" onclick="toggleAccordion('secEmergency')">
-            <span class="acc-icon">🚨</span>
-            <h4>4. Emergency & First Aid</h4>
-            <span class="badge-count" id="countEmergency">Immediate</span>
+            <span>🚨</span>
+            <h4>3. Emergency & First Aid</h4>
+            <span class="badge-count">Immediate</span>
             <span class="chevron">▼</span>
           </div>
           <div class="accordion-body">
-            <ul class="subpart-list" id="listEmergency">
-              <li onclick="selectFromAutocomplete('mph_lion_pharmacy')">Campus Medical Center & First Aid 📍</li>
+            <ul class="subpart-list">
+              <li onclick="selectFromAutocomplete('mph_lion_pharmacy')">Campus Medical Center 📍</li>
               <li onclick="selectFromAutocomplete('gate_2')">Main Gate Security Desk 📍</li>
               <li onclick="selectFromAutocomplete('ab1')">IT Desk / Admin Helpline 📍</li>
             </ul>
@@ -902,65 +793,23 @@
         </div>
       </div>
 
-      <!-- Emergency Contacts & Services Widgets -->
+      <!-- Emergency Contacts Widget -->
       <div class="widget">
         <h3>📞 Emergency Contacts & Services</h3>
         <div class="contacts-grid">
           <div class="contact-item">
             <strong>Fees Related Issues</strong>
-            <span>Phone: +91/0 7024181841<br>Email: feescollection@vitbhopal.ac.in, sdc@vitbhopal.ac.in</span>
+            <span>+91 7024181841 | feescollection@vitbhopal.ac.in</span>
           </div>
           <div class="contact-item">
-            <strong>Admission Contacts</strong>
-            <span>BBA: +91/0 7024181823<br>Int.M.Sc: +91/0 7024181826<br>Int.M.Tech: +91/0 7024244336<br>M.Tech: +91/0 7024181820<br>MCA: +91/0 7024181821<br>B.Tech: +91/0 7024181820</span>
-          </div>
-          <div class="contact-item">
-            <strong>Helpline</strong>
-            <span>Phone: 07560350913<br>Email: info@vitbhopal.ac.in</span>
+            <strong>Admissions Helpline</strong>
+            <span>+91 7024181820 | info@vitbhopal.ac.in</span>
           </div>
         </div>
       </div>
 
     </div>
 
-  </div>
-
-  <!-- Campus Image Gallery Modal -->
-  <div id="slideshowModal" class="slideshow-modal">
-    <span class="close-slideshow" onclick="closeSlideshow()">✕</span>
-    <div class="slideshow-container">
-      
-      <div class="slide active">
-        <img src="https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?auto=format&fit=crop&w=800&q=80" alt="Academic Block 1">
-        <div class="slide-caption">Academic Block 1 (AB-1)</div>
-      </div>
-
-      <div class="slide">
-        <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=80" alt="Academic Block 2">
-        <div class="slide-caption">Academic Block 2 (AB-2)</div>
-      </div>
-
-      <div class="slide">
-        <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Lab Complex">
-        <div class="slide-caption">Engineering Lab Complex</div>
-      </div>
-
-      <div class="slide">
-        <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80" alt="Boys Hostel">
-        <div class="slide-caption">Boys Hostel Complex</div>
-      </div>
-
-      <div class="slide">
-        <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80" alt="Girls Hostel">
-        <div class="slide-caption">Girls Hostel Block</div>
-      </div>
-
-      <div class="slide-nav">
-        <button class="nav-arrow" onclick="changeSlide(-1)">❮</button>
-        <button class="nav-arrow" onclick="changeSlide(1)">❯</button>
-      </div>
-
-    </div>
   </div>
 
   <!-- Floating Campus Location Chatbot Popup -->
@@ -984,56 +833,25 @@
 
   <!-- Application Logic Script -->
   <script>
-    /* =========================================================
-       1. HIDDEN KNOWLEDGE BASE (Integrated Data Engine)
-       ========================================================= */
+    /* Knowledge Base & Multi-language Keyword Data Engine */
     const locationData = [
       {
         id: "p1",
         name: "Central Cafeteria",
         category: "food",
         functionality: "Offers hot meals, beverages, snacks, and indoor seating.",
-        keywords: [
-          "eat", "food", "cafeteria", "lunch", "dinner", "breakfast", "dine", "snack", "hungry", "canteen", "restaurant",
-          "khana", "khao", "bhookh", "bhojan",
-          "comida", "comer", "restaurante"
-        ]
+        keywords: ["eat", "food", "cafeteria", "lunch", "dinner", "breakfast", "dine", "snack", "canteen", "khana", "khao", "bhookh"]
       },
       {
         id: "special_block",
         name: "Special Block",
         category: "food",
         functionality: "Special block facility, food stalls, coffee shops, and grab-and-go meals.",
-        keywords: [
-          "special block", "special", "block", "eat", "food", "court", "coffee", "tea", "burger", "pizza", "snack", "hungry",
-          "khana", "nashta", "chai"
-        ]
-      },
-      {
-        id: "p3",
-        name: "Main Library",
-        category: "study",
-        functionality: "Quiet study zones, book borrowing, computer labs, and printing services.",
-        keywords: [
-          "read", "book", "study", "quiet", "print", "computer", "library",
-          "padhai", "pustak", "kitab",
-          "leer", "estudiar", "biblioteca"
-        ]
-      },
-      {
-        id: "p4",
-        name: "Health & Wellness Center",
-        category: "health",
-        functionality: "First aid treatment, medical consultations, and emergency health support.",
-        keywords: [
-          "doctor", "sick", "medicine", "health", "hospital", "clinic", "first aid", "emergency", "hurt",
-          "dawa", "beemar", "ilaj", "doctor",
-          "medico", "salud", "enfermo"
-        ]
+        keywords: ["special block", "special", "block", "eat", "food", "court", "coffee", "tea", "burger", "pizza", "khana", "chai"]
       }
     ];
 
-    // Theme Toggle Logic
+    // Theme Toggle
     function toggleTheme() {
       const body = document.body;
       const themeBtn = document.getElementById('themeBtn');
@@ -1061,10 +879,19 @@
       nextStop();
     }
 
-    // Accordion Toggle Logic
+    // Accordion Toggle
     function toggleAccordion(id) {
       const item = document.getElementById(id);
       item.classList.toggle('expanded');
+    }
+
+    // Slide Panel Controls
+    function openPanel() {
+      document.getElementById('detailPanel').classList.add('active');
+    }
+
+    function closePanel() {
+      document.getElementById('detailPanel').classList.remove('active');
     }
 
     // SVG Icon Definitions
@@ -1111,13 +938,13 @@
       maxBoundsViscosity: 0.9
     });
 
-    // OpenStreetMap Tile Layer
+    // OpenStreetMap Layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Campus Data
+    // Campus Master Locations Data
     const campusData = [
       { id: "ab1", name: "Academic Block - 1", category: "Academic", iconType: "academic", lat: 23.077533, lng: 76.851404, landmark: "Central administrative offices & main library building.", hostelWalkTime: "13-15 min", ab1WalkTime: "0 min" },
       { id: "ab2", name: "Academic Block - 2", category: "Academic", iconType: "academic", lat: 23.073653, lng: 76.855719, landmark: "Main academic block for classes & departmental labs.", hostelWalkTime: "7-9 min", ab1WalkTime: "10 min" },
@@ -1133,19 +960,15 @@
       { id: "open_auditorium", name: "Open Auditorium", category: "Amenity", iconType: "amenity", lat: 23.074374, lng: 76.851067, landmark: "Open-air amphitheater for cultural events.", hostelWalkTime: "10 min", ab1WalkTime: "6 min" },
       { id: "parcel_pickup", name: "Parcel Pickup", category: "Amenity", iconType: "amenity", lat: 23.074642, lng: 76.850098, landmark: "Courier and delivery parcel retrieval area.", hostelWalkTime: "11 min", ab1WalkTime: "7 min" },
       { id: "chancellor_house", name: "Chancellor's House", category: "Amenity", iconType: "amenity", lat: 23.074874, lng: 76.851380, landmark: "Executive residence wing.", hostelWalkTime: "10 min", ab1WalkTime: "6 min" },
-      { id: "mph_lion_pharmacy", name: "Multi Purpose Hall, Lion Statue & Pharmacy", category: "Amenity", iconType: "amenity", lat: 23.076156, lng: 76.849873, landmark: "Includes medical store, lion landmark statue, and event hall.", hostelWalkTime: "12 min", ab1WalkTime: "8 min" },
+      { id: "mph_lion_pharmacy", name: "Multi Purpose Hall & Pharmacy", category: "Amenity", iconType: "amenity", lat: 23.076156, lng: 76.849873, landmark: "Includes medical store, lion landmark statue, and event hall.", hostelWalkTime: "12 min", ab1WalkTime: "8 min" },
       { id: "gate_1", name: "VIT Main Gate 2", category: "Amenity", iconType: "amenity", lat: 23.084526, lng: 76.849599, landmark: "Primary campus entry gate off the highway.", hostelWalkTime: "25 min", ab1WalkTime: "18 min" },
       { id: "gate_2", name: "VIT Main Gate 1", category: "Amenity", iconType: "amenity", lat: 23.075473, lng: 76.849643, landmark: "Secondary security gate checkpoint.", hostelWalkTime: "12 min", ab1WalkTime: "8 min" },
-      { id: "garden", name: "Campus Garden", category: "Amenity", iconType: "amenity", lat: 23.075122, lng: 76.849957, landmark: "Central green park and walkway.", hostelWalkTime: "11 min", ab1WalkTime: "7 min" },
-      { id: "vit_square", name: "VIT Bhopal Square", category: "Amenity", iconType: "amenity", lat: 23.075193, lng: 76.855043, landmark: "Central campus junction.", hostelWalkTime: "6 min", ab1WalkTime: "7 min" },
       { id: "cricket_ground", name: "Cricket Ground", category: "Sports", iconType: "sports", lat: 23.074413, lng: 76.853938, landmark: "Outdoor cricket ground.", hostelWalkTime: "6 min", ab1WalkTime: "8 min" },
-      { id: "football_ground", name: "Football Ground", category: "Sports", iconType: "sports", lat: 23.074650, lng: 76.855858, landmark: "Full-size football field.", hostelWalkTime: "4 min", ab1WalkTime: "9 min" },
-      { id: "big_ground", name: "Big Ground", category: "Sports", iconType: "sports", lat: 23.074362, lng: 76.859621, landmark: "Large open sports and event field near hostel blocks.", hostelWalkTime: "2 min", ab1WalkTime: "14 min" }
+      { id: "football_ground", name: "Football Ground", category: "Sports", iconType: "sports", lat: 23.074650, lng: 76.855858, landmark: "Full-size football field.", hostelWalkTime: "4 min", ab1WalkTime: "9 min" }
     ];
 
     let markerMap = {};
 
-    // Render Pins & Enable FlyTo with direct marker access
     function renderMarkers(data, autoRelocate = true) {
       Object.values(markerMap).forEach(m => map.removeLayer(m));
       markerMap = {};
@@ -1166,7 +989,7 @@
       }
     }
 
-    // Display place info in dashboard and open map popup directly
+    // Display place info & open detail slide panel
     function selectPlace(place) {
       document.getElementById('placeCategory').innerText = place.category;
       document.getElementById('placeTitle').innerText = place.name;
@@ -1194,9 +1017,11 @@
       if (markerMap[place.id]) {
         markerMap[place.id].openPopup();
       }
+
+      // Open side details panel
+      openPanel();
     }
 
-    // Direct Handler for Clickable Elements
     function selectFromAutocomplete(id) {
       const target = campusData.find(p => p.id === id);
       if (target) {
@@ -1267,45 +1092,13 @@
       renderMarkers(campusData, false);
     }
 
-    // Modal Slideshow Controls
-    let currentSlide = 0;
-    const slides = document.getElementsByClassName('slide');
-
-    function openSlideshow() {
-      document.getElementById('slideshowModal').classList.add('active');
-      showSlide(currentSlide);
-    }
-
-    function closeSlideshow() {
-      document.getElementById('slideshowModal').classList.remove('active');
-    }
-
-    function changeSlide(n) {
-      showSlide(currentSlide += n);
-    }
-
-    function showSlide(n) {
-      if (n >= slides.length) currentSlide = 0;
-      if (n < 0) currentSlide = slides.length - 1;
-      
-      for (let i = 0; i < slides.length; i++) {
-        slides[i].classList.remove('active');
-      }
-      slides[currentSlide].classList.add('active');
-    }
-
-    /* =========================================================
-       2. CHATBOT LOGIC & KEYWORD MATCHING ENGINE
-       ========================================================= */
+    // Chatbot logic
     function toggleChatbot() {
-      const chatPopup = document.getElementById('chatPopup');
-      chatPopup.classList.toggle('active');
+      document.getElementById('chatPopup').classList.toggle('active');
     }
 
     function handleChatKeyPress(event) {
-      if (event.key === 'Enter') {
-        sendChatMessage();
-      }
+      if (event.key === 'Enter') sendChatMessage();
     }
 
     function sendChatMessage() {
@@ -1334,48 +1127,27 @@
     function searchLocationData(query) {
       const cleanQuery = query.toLowerCase().replace(/[^\w\s]/gi, '');
       const words = cleanQuery.split(/\s+/);
-
       const matchedPlaces = new Set();
-
-      locationData.forEach(place => {
-        place.keywords.forEach(keyword => {
-          words.forEach(word => {
-            if (word === keyword || (word.length > 3 && keyword.includes(word))) {
-              matchedPlaces.add(place);
-            }
-          });
-        });
-      });
 
       campusData.forEach(place => {
         const pName = place.name.toLowerCase();
         words.forEach(word => {
           if (word.length >= 2 && (pName.includes(word) || place.id.toLowerCase().includes(word))) {
-            matchedPlaces.add({
-              name: place.name,
-              functionality: place.landmark
-            });
+            matchedPlaces.add({ name: place.name, functionality: place.landmark });
           }
         });
       });
 
       const results = Array.from(matchedPlaces);
-
       if (results.length === 0) {
-        return "I'm sorry, I couldn't find a place matching your request. Could you rephrase your question or try asking about food, study areas, or medical help?";
+        return "I couldn't find a place matching that. Try asking about AB-1, Hostels, Mess, or Pharmacy!";
       }
 
-      if (results.length === 1) {
-        const place = results[0];
-        return `You can visit <strong>${place.name}</strong>.<br><br><strong>Function:</strong> ${place.functionality}`;
-      }
-
-      let responseStr = `Here are the places matching your request:<br><ul style="margin: 8px 0; padding-left: 18px;">`;
+      let responseStr = `Matches found:<br><ul style="margin: 6px 0; padding-left: 16px;">`;
       results.forEach(place => {
-        responseStr += `<li style="margin-bottom: 6px;"><strong>${place.name}</strong>: ${place.functionality}</li>`;
+        responseStr += `<li><strong>${place.name}</strong>: ${place.functionality}</li>`;
       });
       responseStr += `</ul>`;
-
       return responseStr;
     }
 
