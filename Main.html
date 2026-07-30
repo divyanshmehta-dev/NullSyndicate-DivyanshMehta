@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIT Bhopal - Smart Campus Nav</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <style>
+    /* CSS Variables for Radium & Theme Toggle */
+    :root {
+      /* Light Mode Palette */
+      --bg-primary: #f4f6f9;
+      --bg-card: #ffffff;
+      --bg-subcard: #f8fafc;
+      --text-main: #1a202c;
+      --text-sub: #4a5568;
+      --border-color: #e2e8f0;
+      
+      /* Radium Accent Colors */
+      --radium-cyan: #00f0ff;
+      --radium-green: #00ff66;
+      --radium-purple: #9d00ff;
+      --radium-pink: #ff007f;
+      --radium-yellow: #ccff00;
+      
+      /* Active Accent Graphics */
+      --accent-active: #00f0ff;
+      --glow-active: 0 0 15px rgba(0, 240, 255, 0.6);
+
+      /* Chatbot variables */
+      --chat-bg: #ffffff;
+      --chat-msg-user: #00f0ff;
+      --chat-msg-bot: #f1f5f9;
+      --chat-text-user: #000000;
+      --chat-text-bot: #1a202c;
+    }
+
+    body.dark-mode {
+      /* Dark Mode Palette */
+      --bg-primary: #0a0e17;
+      --bg-card: #121824;
+      --bg-subcard: #1a2332;
+      --text-main: #f0f6fc;
+      --text-sub: #a3b1c6;
+      --border-color: #232d3f;
+      
+      --accent-active: #00ff66;
+      --glow-active: 0 0 15px rgba(0, 255, 102, 0.6);
+
+      /* Chatbot dark mode overrides */
+      --chat-bg: #121824;
+      --chat-msg-user: #00ff66;
+      --chat-msg-bot: #1a2332;
+      --chat-text-user: #000000;
+      --chat-text-bot: #f0f6fc;
+    }
+
+    /* Reset & Base Layout */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      display: flex;
+    }
+
+    /* Main Container: Split View */
+    .app-container {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* Left Map Container (35% Width) */
+    .map-section {
+      position: relative;
+      width: 35%;
+      height: 100%;
+      border-right: 2px solid var(--border-color);
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+      background: #111;
+    }
+
+    /* Radium Glow Icon Pin Styling */
+    .custom-svg-icon {
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffffff;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .custom-svg-icon:hover {
+      transform: scale(1.25);
+      z-index: 1000 !important;
+    }
+
+    .custom-svg-icon.academic { background: #0066ff; color: #00f0ff; box-shadow: 0 0 12px rgba(0, 240, 255, 0.8); }
+    .custom-svg-icon.food { background: #d97706; color: #ccff00; box-shadow: 0 0 12px rgba(204, 255, 0, 0.8); }
+    .custom-svg-icon.hostel { background: #7c3aed; color: #ff007f; box-shadow: 0 0 12px rgba(255, 0, 127, 0.8); }
+    .custom-svg-icon.sports { background: #059669; color: #00ff66; box-shadow: 0 0 12px rgba(0, 255, 102, 0.8); }
+    .custom-svg-icon.amenity { background: #475569; color: #ffffff; box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+
+    /* Search & Filter Component Styles */
+    .search-container {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      width: 92%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: var(--glow-active);
+      display: flex;
+      align-items: center;
+      padding: 4px 12px;
+    }
+
+    .search-input-wrapper input {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    .search-icon {
+      color: var(--text-sub);
+      flex-shrink: 0;
+    }
+
+    .clear-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: var(--text-sub);
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    /* Autocomplete Dropdown List */
+    .autocomplete-list {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1001;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      display: none;
+    }
+
+    .autocomplete-list.active {
+      display: block;
+    }
+
+    .autocomplete-item {
+      padding: 10px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .autocomplete-item:last-child {
+      border-bottom: none;
+    }
+
+    .autocomplete-item:hover {
+      background: var(--bg-subcard);
+      color: var(--accent-active);
+    }
+
+    .autocomplete-item span.cat-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--bg-subcard);
+      color: var(--text-sub);
+    }
+
+    /* Filter Pills Bar */
+    .filter-pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .pill.active, .pill:hover {
+      background: var(--accent-active);
+      color: #000;
+      box-shadow: var(--glow-active);
+      font-weight: 700;
+    }
+
+    /* Action Buttons Bar */
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-card);
+      color: var(--text-main);
+    }
+
+    .btn-tour {
+      background: var(--radium-purple);
+      color: #fff;
+      border-color: var(--radium-purple);
+    }
+
+    .slideshow-trigger-btn {
+      background: var(--radium-green);
+      color: #000;
+      box-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+      background: var(--bg-subcard);
+      border: 1px solid var(--accent-active);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: var(--glow-active);
+      white-space: nowrap;
+    }
+
+    /* Right Information & Student Dashboard (65% Width) */
+    .info-section {
+      width: 65%;
+      height: 100%;
+      background: var(--bg-primary);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 28px;
+      gap: 22px;
+    }
+
+    .info-header {
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .info-header h1 {
+      font-size: 24px;
+      color: var(--text-main);
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+    }
+
+    .info-header p {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+
+    /* Selected Place Details Card */
+    .details-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-left: 5px solid var(--accent-active);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--glow-active);
+    }
+
+    .badge-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--bg-subcard);
+      color: var(--accent-active);
+      border: 1px solid var(--accent-active);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .walk-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(0, 255, 102, 0.1);
+      color: var(--radium-green);
+      border: 1px solid var(--radium-green);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .details-card h2 {
+      font-size: 22px;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .details-card p {
+      font-size: 15px;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    /* Drawer / Accordion Section Styles */
+    .drawer-sections {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .section-heading {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+    }
+
+    .accordion-item {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg-subcard);
+    }
+
+    .accordion-header {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .accordion-header h4 {
+      flex-grow: 1;
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    .badge-count {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: var(--bg-primary);
+      color: var(--accent-active);
+      border: 1px solid var(--accent-active);
+    }
+
+    .chevron {
+      font-size: 10px;
+      color: var(--text-sub);
+      transition: transform 0.2s ease;
+    }
+
+    .accordion-item.expanded .chevron {
+      transform: rotate(180deg);
+    }
+
+    .accordion-body {
+      display: none;
+      padding: 12px 16px;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-card);
+    }
+
+    .accordion-item.expanded .accordion-body {
+      display: block;
+    }
+
+    .subpart-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Enhanced Clickable Data Items */
+    .subpart-list li {
+      font-size: 13px;
+      color: var(--text-sub);
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: var(--bg-subcard);
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .subpart-list li:hover {
+      color: var(--accent-active);
+      border-color: var(--accent-active);
+      box-shadow: var(--glow-active);
+      transform: translateX(4px);
+    }
+
+    /* Student Useful Info Widgets */
+    .widget {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .widget h3 {
+      font-size: 17px;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    /* Clickable Contact Cards */
+    .contact-item {
+      background: var(--bg-subcard);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .contact-item:hover {
+      border-color: var(--accent-active);
+      box-shadow: var(--glow-active);
+      transform: translateY(-2px);
+    }
+
+    .contact-item strong {
+      display: block;
+      color: var(--text-main);
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .contact-item span {
+      color: var(--text-sub);
+    }
+
+    /* Modal Slideshow Styles */
+    .slideshow-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slideshow-modal.active {
+      display: flex;
+    }
+
+    .slideshow-container {
+      position: relative;
+      width: 90%;
+      max-width: 700px;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid var(--radium-cyan);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+    }
+
+    .slide {
+      display: none;
+      text-align: center;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+    }
+
+    .slide-caption {
+      padding: 12px;
+      background: #111;
+      color: var(--radium-cyan);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .slide-nav {
+      position: absolute;
+      top: 45%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 10px;
+      transform: translateY(-50%);
+    }
+
+    .nav-arrow {
+      background: var(--radium-cyan);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--radium-cyan);
+    }
+
+    .close-slideshow {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      color: var(--radium-pink);
+      font-size: 30px;
+      cursor: pointer;
+      z-index: 2100;
+    }
+
+    /* Floating Chatbot Widget Styles */
+    .chat-widget-toggle {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--accent-active);
+      color: #000;
+      border: none;
+      box-shadow: var(--glow-active);
+      cursor: pointer;
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      transition: transform 0.2s ease;
+    }
+
+    .chat-widget-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    .chat-container-popup {
+      position: fixed;
+      bottom: 95px;
+      right: 25px;
+      width: 380px;
+      max-width: 90vw;
+      height: 520px;
+      max-height: 80vh;
+      background: var(--chat-bg);
+      border: 2px solid var(--accent-active);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5), var(--glow-active);
+      z-index: 3000;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-container-popup.active {
+      display: flex;
+    }
+
+    .chat-header {
+      background: var(--bg-subcard);
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-header h3 {
+      font-size: 15px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-header .close-chat {
+      background: none;
+      border: none;
+      color: var(--text-sub);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-msg {
+      max-width: 82%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+
+    .chat-msg.bot {
+      align-self: flex-start;
+      background: var(--chat-msg-bot);
+      color: var(--chat-text-bot);
+      border-bottom-left-radius: 2px;
+      border: 1px solid var(--border-color);
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+      background: var(--chat-msg-user);
+      color: var(--chat-text-user);
+      border-bottom-right-radius: 2px;
+      font-weight: 600;
+    }
+
+    .chat-input-area {
+      padding: 12px;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-subcard);
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--text-main);
+      outline: none;
+      font-size: 13px;
+    }
+
+    .chat-input-area button {
+      background: var(--accent-active);
+      color: #000;
+      border: none;
+      padding: 0 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Responsive Mobile View Adjustment */
+    @media (max-width: 900px) {
+      .app-container {
+        flex-direction: column;
+      }
+      .map-section {
+        width: 100%;
+        height: 40vh;
+      }
+      .info-section {
+        width: 100%;
+        height: 60vh;
+      }
+    }
+  </style>
+</head>
+<body class="dark-mode">
+
+  <div class="app-container">
+    
+    <!-- LEFT SIDE: MAP SECTION (35% Width) -->
+    <div class="map-section">
+      <header class="search-container">
+        <!-- Integrated Search Input Wrapper -->
+        <div class="search-input-wrapper">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="searchInput" placeholder="Search buildings, labs, landmarks (e.g. AB 1, AI Lab)..." autocomplete="off" oninput="handleSearchInput()">
+          <button id="clearSearchBtn" class="clear-btn" onclick="clearSearch()" hidden>&times;</button>
+          
+          <!-- Autocomplete Dropdown List -->
+          <div id="autocompleteList" class="autocomplete-list"></div>
+        </div>
+        
+        <!-- Category Filter Pills -->
+        <div class="filter-pills" id="filterPills">
+          <button class="pill active" data-category="all" onclick="filterCategory('all', event)">✨ All Places</button>
+          <button class="pill slideshow-trigger-btn" onclick="openSlideshow()">🖼️ Gallery</button>
+          <button class="pill" data-category="academics" onclick="filterCategory('Academic', event)">🎓 Academics</button>
+          <button class="pill" data-category="facilities" onclick="filterCategory('Amenity', event)">🏢 Facilities</button>
+          <button class="pill" data-category="food" onclick="filterCategory('Food', event)">🍕 Food & Hubs</button>
+          <button class="pill" data-category="hostels" onclick="filterCategory('Hostel', event)">🏠 Hostels</button>
+          <button class="pill" data-category="emergency" onclick="filterCategory('Sports', event)">🚨 Emergency</button>
+        </div>
+
+        <!-- Integrated Action Toolbar -->
+        <div class="nav-actions">
+          <!-- First-Time Visitor Tour -->
+          <button class="btn btn-tour" id="tourBtn" onclick="startFreshersTour()">
+            <span>🌟 Freshers Tour</span>
+          </button>
+        </div>
+      </header>
+
+      <div id="map"></div>
+    </div>
+
+    <!-- RIGHT SIDE: STUDENT INFORMATION DASHBOARD (65% Width) -->
+    <div class="info-section">
+      
+      <div class="info-header">
+        <div>
+          <h1>🎓 VIT Bhopal Student Navigator</h1>
+          <p>Enhanced Dashboard & Campus Guidance System</p>
+        </div>
+        <!-- Theme Toggle Button -->
+        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">☀️ Light Mode</button>
+      </div>
+
+      <div class="details-card">
+        <div class="badge-wrapper">
+          <span id="placeCategory" class="badge">Select Location</span>
+          <span id="walkTimeBadge" class="walk-badge" style="display: none;">🚶 -- min walk</span>
+          <span id="ab2WalkBadge" class="walk-badge" style="display: none; background: rgba(0, 240, 255, 0.1); color: var(--radium-cyan); border-color: var(--radium-cyan);">🚶 -- min from AB-1</span>
+        </div>
+        <h2 id="placeTitle">Welcome to VIT Bhopal Nav</h2>
+        <p id="landmarkText">Select any building or landmark icon on the map to view exact details, visual cues, and realistic walking times.</p>
+      </div>
+
+      <!-- Integrated Accordion Sub-Parts Section (All Made Clickable) -->
+      <div class="drawer-sections">
+        <h3 class="section-heading">EXPLORE SUB-PARTS & ROOMS (CLICK TO LOCATE)</h3>
+
+        <!-- Section 1: Academics -->
+        <div class="accordion-item expanded" id="secAcademics">
+          <div class="accordion-header" onclick="toggleAccordion('secAcademics')">
+            <span class="acc-icon">🎓</span>
+            <h4>1. Academics & Departments</h4>
+            <span class="badge-count" id="countAcademics">5 Sub-parts</span>
+            <span class="chevron">▼</span>
+          </div>
+          <div class="accordion-body">
+            <ul class="subpart-list" id="listAcademics">
+              <li onclick="selectFromAutocomplete('ab1')">AB-1 Ground Floor Administrative Block 📍</li>
+              <li onclick="selectFromAutocomplete('ab1')">Central Library (AB-1 First Floor) 📍</li>
+              <li onclick="selectFromAutocomplete('ab2')">AB-2 Main Departmental Classrooms 📍</li>
+              <li onclick="selectFromAutocomplete('lab_complex')">Engineering & CS Practical Labs 📍</li>
+              <li onclick="selectFromAutocomplete('architecture')">School of Architecture Studio 📍</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Section 2: Facilities -->
+        <div class="accordion-item" id="secFacilities">
+          <div class="accordion-header" onclick="toggleAccordion('secFacilities')">
+            <span class="acc-icon">🏢</span>
+            <h4>2. Amenities & Indoor Guidance</h4>
+            <span class="badge-count" id="countFacilities">4 Amenities</span>
+            <span class="chevron">▼</span>
+          </div>
+          <div class="accordion-body">
+            <ul class="subpart-list" id="listFacilities">
+              <li onclick="selectFromAutocomplete('special_block')">Special Block 📍</li>
+              <li onclick="selectFromAutocomplete('mph_lion_pharmacy')">Pharmacy & Medical Center 📍</li>
+              <li onclick="selectFromAutocomplete('parcel_pickup')">Parcel Pickup Hub 📍</li>
+              <li onclick="selectFromAutocomplete('open_auditorium')">Open-Air Amphitheater 📍</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Section 3: Events & Notices -->
+        <div class="accordion-item" id="secEvents">
+          <div class="accordion-header" onclick="toggleAccordion('secEvents')">
+            <span class="acc-icon">📢</span>
+            <h4>3. Live Events & Room Changes</h4>
+            <span class="badge-count" id="countEvents">2 Live</span>
+            <span class="chevron">▼</span>
+          </div>
+          <div class="accordion-body">
+            <ul class="subpart-list" id="listEvents">
+              <li onclick="selectFromAutocomplete('gate_1')">Shuttle Bus Active (Main Gate 2 ↔ AB-1 / AB-2) 📍</li>
+              <li onclick="selectFromAutocomplete('open_auditorium')">Hackathon Briefing @ Open Auditorium (5:00 PM) 📍</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Section 4: Emergency & Support -->
+        <div class="accordion-item" id="secEmergency">
+          <div class="accordion-header" onclick="toggleAccordion('secEmergency')">
+            <span class="acc-icon">🚨</span>
+            <h4>4. Emergency & First Aid</h4>
+            <span class="badge-count" id="countEmergency">Immediate</span>
+            <span class="chevron">▼</span>
+          </div>
+          <div class="accordion-body">
+            <ul class="subpart-list" id="listEmergency">
+              <li onclick="selectFromAutocomplete('mph_lion_pharmacy')">Campus Medical Center & First Aid 📍</li>
+              <li onclick="selectFromAutocomplete('gate_2')">Main Gate Security Desk 📍</li>
+              <li onclick="selectFromAutocomplete('ab1')">IT Desk / Admin Helpline 📍</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emergency Contacts & Services Widgets -->
+      <div class="widget">
+        <h3>📞 Emergency Contacts & Services</h3>
+        <div class="contacts-grid">
+          <div class="contact-item">
+            <strong>Fees Related Issues</strong>
+            <span>Phone: +91/0 7024181841<br>Email: feescollection@vitbhopal.ac.in, sdc@vitbhopal.ac.in</span>
+          </div>
+          <div class="contact-item">
+            <strong>Admission Contacts</strong>
+            <span>BBA: +91/0 7024181823<br>Int.M.Sc: +91/0 7024181826<br>Int.M.Tech: +91/0 7024244336<br>M.Tech: +91/0 7024181820<br>MCA: +91/0 7024181821<br>B.Tech: +91/0 7024181820</span>
+          </div>
+          <div class="contact-item">
+            <strong>Helpline</strong>
+            <span>Phone: 07560350913<br>Email: info@vitbhopal.ac.in</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Campus Image Gallery Modal -->
+  <div id="slideshowModal" class="slideshow-modal">
+    <span class="close-slideshow" onclick="closeSlideshow()">✕</span>
+    <div class="slideshow-container">
+      
+      <div class="slide active">
+        <img src="https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?auto=format&fit=crop&w=800&q=80" alt="Academic Block 1">
+        <div class="slide-caption">Academic Block 1 (AB-1)</div>
+      </div>
+
+      <div class="slide">
+        <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=80" alt="Academic Block 2">
+        <div class="slide-caption">Academic Block 2 (AB-2)</div>
+      </div>
+
+      <div class="slide">
+        <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Lab Complex">
+        <div class="slide-caption">Engineering Lab Complex</div>
+      </div>
+
+      <div class="slide">
+        <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80" alt="Boys Hostel">
+        <div class="slide-caption">Boys Hostel Complex</div>
+      </div>
+
+      <div class="slide">
+        <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80" alt="Girls Hostel">
+        <div class="slide-caption">Girls Hostel Block</div>
+      </div>
+
+      <div class="slide-nav">
+        <button class="nav-arrow" onclick="changeSlide(-1)">❮</button>
+        <button class="nav-arrow" onclick="changeSlide(1)">❯</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Floating Campus Location Chatbot Popup -->
+  <button class="chat-widget-toggle" onclick="toggleChatbot()" title="Campus Assistant">🤖</button>
+  <div class="chat-container-popup" id="chatPopup">
+    <div class="chat-header">
+      <h3>🤖 Location Assistant</h3>
+      <button class="close-chat" onclick="toggleChatbot()">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg bot">Hello! How can I help you find a place or service today?</div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Ask a question (e.g., Where is Special Block?)..." onkeypress="handleChatKeyPress(event)">
+      <button onclick="sendChatMessage()">Send</button>
+    </div>
+  </div>
+
+  <!-- Leaflet JS CDN -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Application Logic Script -->
+  <script>
+    /* =========================================================
+       1. HIDDEN KNOWLEDGE BASE (Integrated Data Engine)
+       ========================================================= */
+    const locationData = [
+      {
+        id: "p1",
+        name: "Central Cafeteria",
+        category: "food",
+        functionality: "Offers hot meals, beverages, snacks, and indoor seating.",
+        keywords: [
+          "eat", "food", "cafeteria", "lunch", "dinner", "breakfast", "dine", "snack", "hungry", "canteen", "restaurant",
+          "khana", "khao", "bhookh", "bhojan",
+          "comida", "comer", "restaurante"
+        ]
+      },
+      {
+        id: "special_block",
+        name: "Special Block",
+        category: "food",
+        functionality: "Special block facility, food stalls, coffee shops, and grab-and-go meals.",
+        keywords: [
+          "special block", "special", "block", "eat", "food", "court", "coffee", "tea", "burger", "pizza", "snack", "hungry",
+          "khana", "nashta", "chai"
+        ]
+      },
+      {
+        id: "p3",
+        name: "Main Library",
+        category: "study",
+        functionality: "Quiet study zones, book borrowing, computer labs, and printing services.",
+        keywords: [
+          "read", "book", "study", "quiet", "print", "computer", "library",
+          "padhai", "pustak", "kitab",
+          "leer", "estudiar", "biblioteca"
+        ]
+      },
+      {
+        id: "p4",
+        name: "Health & Wellness Center",
+        category: "health",
+        functionality: "First aid treatment, medical consultations, and emergency health support.",
+        keywords: [
+          "doctor", "sick", "medicine", "health", "hospital", "clinic", "first aid", "emergency", "hurt",
+          "dawa", "beemar", "ilaj", "doctor",
+          "medico", "salud", "enfermo"
+        ]
+      }
+    ];
+
+    // Theme Toggle Logic
+    function toggleTheme() {
+      const body = document.body;
+      const themeBtn = document.getElementById('themeBtn');
+      body.classList.toggle('dark-mode');
+      
+      if (body.classList.contains('dark-mode')) {
+        themeBtn.innerText = '☀️ Light Mode';
+      } else {
+        themeBtn.innerText = '🌙 Dark Mode';
+      }
+    }
+
+    // Freshers Tour Trigger
+    function startFreshersTour() {
+      const tourLocations = ['gate_2', 'ab1', 'ab2', 'special_block', 'all_boys_hostels'];
+      let idx = 0;
+      
+      const nextStop = () => {
+        if (idx < tourLocations.length) {
+          selectFromAutocomplete(tourLocations[idx]);
+          idx++;
+          setTimeout(nextStop, 3500);
+        }
+      };
+      nextStop();
+    }
+
+    // Accordion Toggle Logic
+    function toggleAccordion(id) {
+      const item = document.getElementById(id);
+      item.classList.toggle('expanded');
+    }
+
+    // SVG Icon Definitions
+    const iconsSVG = {
+      book: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`,
+      food: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2v10M18 12h-3v10M21 12h-3M3 2v6a3 3 0 0 0 3 h0a3 3 0 0 0 3-3V2M6 11v11"/></svg>`,
+      bed: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h20v12M2 17h20M6 8v3M10 8v3"/></svg>`,
+      sports: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20M2 12h20"/></svg>`,
+      amenity: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`
+    };
+
+    function createCustomIcon(type, iconSvg) {
+      return L.divIcon({
+        className: `custom-svg-icon ${type}`,
+        html: iconSvg,
+        iconSize: [36, 36],
+        iconAnchor: [18, 18],
+        popupAnchor: [0, -18]
+      });
+    }
+
+    const iconMap = {
+      academic: createCustomIcon('academic', iconsSVG.book),
+      food: createCustomIcon('food', iconsSVG.food),
+      hostel: createCustomIcon('hostel', iconsSVG.bed),
+      sports: createCustomIcon('sports', iconsSVG.sports),
+      amenity: createCustomIcon('amenity', iconsSVG.amenity)
+    };
+
+    // Reference Coordinates
+    const VIT_BHOPAL_CENTER = [23.075473, 76.851000];
+    const CAMPUS_BOUNDS = L.latLngBounds(
+      L.latLng(23.068000, 76.838000),
+      L.latLng(23.088000, 76.865000)
+    );
+
+    // Initialize Map
+    const map = L.map('map', {
+      center: VIT_BHOPAL_CENTER,
+      zoom: 16,
+      minZoom: 15,
+      maxZoom: 19,
+      maxBounds: CAMPUS_BOUNDS,
+      maxBoundsViscosity: 0.9
+    });
+
+    // OpenStreetMap Tile Layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Campus Data
+    const campusData = [
+      { id: "ab1", name: "Academic Block - 1", category: "Academic", iconType: "academic", lat: 23.077533, lng: 76.851404, landmark: "Central administrative offices & main library building.", hostelWalkTime: "13-15 min", ab1WalkTime: "0 min" },
+      { id: "ab2", name: "Academic Block - 2", category: "Academic", iconType: "academic", lat: 23.073653, lng: 76.855719, landmark: "Main academic block for classes & departmental labs.", hostelWalkTime: "7-9 min", ab1WalkTime: "10 min" },
+      { id: "lab_complex", name: "Lab Complex", category: "Academic", iconType: "academic", lat: 23.078600, lng: 76.849959, landmark: "Specialized engineering & computer science practical labs.", hostelWalkTime: "14-16 min", ab1WalkTime: "3 min" },
+      { id: "architecture", name: "Architecture Building", category: "Academic", iconType: "academic", lat: 23.078096, lng: 76.850202, landmark: "School of Architecture complex near the lab wing.", hostelWalkTime: "14-16 min", ab1WalkTime: "2 min" },
+      { id: "boys_hostel_1", name: "Boys Hostel Block - 1", category: "Hostel", iconType: "hostel", lat: 23.075439, lng: 76.859820, landmark: "Primary residential block for boys.", hostelWalkTime: "2 min", ab1WalkTime: "13-15 min" },
+      { id: "all_boys_hostels", name: "All Boys Hostels", category: "Hostel", iconType: "hostel", lat: 23.073343, lng: 76.858988, landmark: "Residential cluster containing senior & junior boys hosteling blocks.", hostelWalkTime: "0 min", ab1WalkTime: "13-15 min" },
+      { id: "girls_hostel", name: "Girls Hostel", category: "Hostel", iconType: "hostel", lat: 23.075075, lng: 76.853110, landmark: "Secured girls residential complex.", hostelWalkTime: "8 min", ab1WalkTime: "6 min" },
+      { id: "faculty_house", name: "Faculty House", category: "Hostel", iconType: "hostel", lat: 23.071239, lng: 76.862288, landmark: "Staff and faculty residential quarters.", hostelWalkTime: "5 min", ab1WalkTime: "18 min" },
+      { id: "special_block", name: "Special Block", category: "Food", iconType: "food", lat: 23.072532, lng: 76.857736, landmark: "Multi-cuisine student special block area and snack shops.", hostelWalkTime: "3 min", ab1WalkTime: "12 min" },
+      { id: "safal_jmb_mess", name: "Safal Mess & JMB Mess", category: "Food", iconType: "food", lat: 23.072424, lng: 76.859578, landmark: "Main hostel dining mess hall.", hostelWalkTime: "2 min", ab1WalkTime: "14 min" },
+      { id: "mayuri_mess", name: "Mayuri Mess", category: "Food", iconType: "food", lat: 23.073590, lng: 76.860230, landmark: "Hostel dining hall facility.", hostelWalkTime: "2 min", ab1WalkTime: "14 min" },
+      { id: "open_auditorium", name: "Open Auditorium", category: "Amenity", iconType: "amenity", lat: 23.074374, lng: 76.851067, landmark: "Open-air amphitheater for cultural events.", hostelWalkTime: "10 min", ab1WalkTime: "6 min" },
+      { id: "parcel_pickup", name: "Parcel Pickup", category: "Amenity", iconType: "amenity", lat: 23.074642, lng: 76.850098, landmark: "Courier and delivery parcel retrieval area.", hostelWalkTime: "11 min", ab1WalkTime: "7 min" },
+      { id: "chancellor_house", name: "Chancellor's House", category: "Amenity", iconType: "amenity", lat: 23.074874, lng: 76.851380, landmark: "Executive residence wing.", hostelWalkTime: "10 min", ab1WalkTime: "6 min" },
+      { id: "mph_lion_pharmacy", name: "Multi Purpose Hall, Lion Statue & Pharmacy", category: "Amenity", iconType: "amenity", lat: 23.076156, lng: 76.849873, landmark: "Includes medical store, lion landmark statue, and event hall.", hostelWalkTime: "12 min", ab1WalkTime: "8 min" },
+      { id: "gate_1", name: "VIT Main Gate 2", category: "Amenity", iconType: "amenity", lat: 23.084526, lng: 76.849599, landmark: "Primary campus entry gate off the highway.", hostelWalkTime: "25 min", ab1WalkTime: "18 min" },
+      { id: "gate_2", name: "VIT Main Gate 1", category: "Amenity", iconType: "amenity", lat: 23.075473, lng: 76.849643, landmark: "Secondary security gate checkpoint.", hostelWalkTime: "12 min", ab1WalkTime: "8 min" },
+      { id: "garden", name: "Campus Garden", category: "Amenity", iconType: "amenity", lat: 23.075122, lng: 76.849957, landmark: "Central green park and walkway.", hostelWalkTime: "11 min", ab1WalkTime: "7 min" },
+      { id: "vit_square", name: "VIT Bhopal Square", category: "Amenity", iconType: "amenity", lat: 23.075193, lng: 76.855043, landmark: "Central campus junction.", hostelWalkTime: "6 min", ab1WalkTime: "7 min" },
+      { id: "cricket_ground", name: "Cricket Ground", category: "Sports", iconType: "sports", lat: 23.074413, lng: 76.853938, landmark: "Outdoor cricket ground.", hostelWalkTime: "6 min", ab1WalkTime: "8 min" },
+      { id: "football_ground", name: "Football Ground", category: "Sports", iconType: "sports", lat: 23.074650, lng: 76.855858, landmark: "Full-size football field.", hostelWalkTime: "4 min", ab1WalkTime: "9 min" },
+      { id: "big_ground", name: "Big Ground", category: "Sports", iconType: "sports", lat: 23.074362, lng: 76.859621, landmark: "Large open sports and event field near hostel blocks.", hostelWalkTime: "2 min", ab1WalkTime: "14 min" }
+    ];
+
+    let markerMap = {};
+
+    // Render Pins & Enable FlyTo with direct marker access
+    function renderMarkers(data, autoRelocate = true) {
+      Object.values(markerMap).forEach(m => map.removeLayer(m));
+      markerMap = {};
+
+      data.forEach(place => {
+        const marker = L.marker([place.lat, place.lng], {
+          icon: iconMap[place.iconType] || iconMap.amenity
+        }).addTo(map);
+
+        marker.bindPopup(`<b>${place.name}</b><br><small>${place.category}</small>`);
+        marker.on('click', () => selectPlace(place));
+
+        markerMap[place.id] = marker;
+      });
+
+      if (autoRelocate && data.length > 0) {
+        map.flyTo([data[0].lat, data[0].lng], 16);
+      }
+    }
+
+    // Display place info in dashboard and open map popup directly
+    function selectPlace(place) {
+      document.getElementById('placeCategory').innerText = place.category;
+      document.getElementById('placeTitle').innerText = place.name;
+      document.getElementById('landmarkText').innerText = place.landmark;
+
+      const walkTimeBadge = document.getElementById('walkTimeBadge');
+      const ab2WalkBadge = document.getElementById('ab2WalkBadge');
+
+      if (place.hostelWalkTime) {
+        walkTimeBadge.innerText = `🚶 ${place.hostelWalkTime} walk from Hostels`;
+        walkTimeBadge.style.display = 'inline-flex';
+      } else {
+        walkTimeBadge.style.display = 'none';
+      }
+
+      if (place.ab1WalkTime) {
+        ab2WalkBadge.innerText = `🚶 ${place.ab1WalkTime} walk from AB-1`;
+        ab2WalkBadge.style.display = 'inline-flex';
+      } else {
+        ab2WalkBadge.style.display = 'none';
+      }
+
+      map.flyTo([place.lat, place.lng], 17);
+      
+      if (markerMap[place.id]) {
+        markerMap[place.id].openPopup();
+      }
+    }
+
+    // Direct Handler for Clickable Elements
+    function selectFromAutocomplete(id) {
+      const target = campusData.find(p => p.id === id);
+      if (target) {
+        selectPlace(target);
+      }
+    }
+
+    // Filter Logic
+    function filterCategory(category, event) {
+      if (event) {
+        document.querySelectorAll('.filter-pills .pill').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+      }
+
+      if (category === 'all') {
+        renderMarkers(campusData, false);
+      } else {
+        const filtered = campusData.filter(p => p.category === category);
+        renderMarkers(filtered, true);
+      }
+    }
+
+    // Search Logic
+    function handleSearchInput() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const listContainer = document.getElementById('autocompleteList');
+      const clearBtn = document.getElementById('clearSearchBtn');
+
+      clearBtn.hidden = query.length === 0;
+
+      if (!query) {
+        listContainer.classList.remove('active');
+        renderMarkers(campusData, false);
+        return;
+      }
+
+      const matches = campusData.filter(p => 
+        p.name.toLowerCase().includes(query) || 
+        p.landmark.toLowerCase().includes(query) ||
+        p.category.toLowerCase().includes(query)
+      );
+
+      listContainer.innerHTML = '';
+      if (matches.length > 0) {
+        listContainer.classList.add('active');
+        matches.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'autocomplete-item';
+          div.innerHTML = `<span>${item.name}</span><span class="cat-badge">${item.category}</span>`;
+          div.onclick = () => {
+            selectPlace(item);
+            listContainer.classList.remove('active');
+            document.getElementById('searchInput').value = item.name;
+          };
+          listContainer.appendChild(div);
+        });
+      } else {
+        listContainer.classList.remove('active');
+      }
+
+      renderMarkers(matches, false);
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearSearchBtn').hidden = true;
+      document.getElementById('autocompleteList').classList.remove('active');
+      renderMarkers(campusData, false);
+    }
+
+    // Modal Slideshow Controls
+    let currentSlide = 0;
+    const slides = document.getElementsByClassName('slide');
+
+    function openSlideshow() {
+      document.getElementById('slideshowModal').classList.add('active');
+      showSlide(currentSlide);
+    }
+
+    function closeSlideshow() {
+      document.getElementById('slideshowModal').classList.remove('active');
+    }
+
+    function changeSlide(n) {
+      showSlide(currentSlide += n);
+    }
+
+    function showSlide(n) {
+      if (n >= slides.length) currentSlide = 0;
+      if (n < 0) currentSlide = slides.length - 1;
+      
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].classList.remove('active');
+      }
+      slides[currentSlide].classList.add('active');
+    }
+
+    /* =========================================================
+       2. CHATBOT LOGIC & KEYWORD MATCHING ENGINE
+       ========================================================= */
+    function toggleChatbot() {
+      const chatPopup = document.getElementById('chatPopup');
+      chatPopup.classList.toggle('active');
+    }
+
+    function handleChatKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendChatMessage();
+      }
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendChatMessage(text, 'user');
+      input.value = '';
+
+      setTimeout(() => {
+        const reply = searchLocationData(text);
+        appendChatMessage(reply, 'bot');
+      }, 300);
+    }
+
+    function appendChatMessage(message, sender) {
+      const container = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `chat-msg ${sender}`;
+      msgDiv.innerHTML = message;
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function searchLocationData(query) {
+      const cleanQuery = query.toLowerCase().replace(/[^\w\s]/gi, '');
+      const words = cleanQuery.split(/\s+/);
+
+      const matchedPlaces = new Set();
+
+      locationData.forEach(place => {
+        place.keywords.forEach(keyword => {
+          words.forEach(word => {
+            if (word === keyword || (word.length > 3 && keyword.includes(word))) {
+              matchedPlaces.add(place);
+            }
+          });
+        });
+      });
+
+      campusData.forEach(place => {
+        const pName = place.name.toLowerCase();
+        words.forEach(word => {
+          if (word.length >= 2 && (pName.includes(word) || place.id.toLowerCase().includes(word))) {
+            matchedPlaces.add({
+              name: place.name,
+              functionality: place.landmark
+            });
+          }
+        });
+      });
+
+      const results = Array.from(matchedPlaces);
+
+      if (results.length === 0) {
+        return "I'm sorry, I couldn't find a place matching your request. Could you rephrase your question or try asking about food, study areas, or medical help?";
+      }
+
+      if (results.length === 1) {
+        const place = results[0];
+        return `You can visit <strong>${place.name}</strong>.<br><br><strong>Function:</strong> ${place.functionality}`;
+      }
+
+      let responseStr = `Here are the places matching your request:<br><ul style="margin: 8px 0; padding-left: 18px;">`;
+      results.forEach(place => {
+        responseStr += `<li style="margin-bottom: 6px;"><strong>${place.name}</strong>: ${place.functionality}</li>`;
+      });
+      responseStr += `</ul>`;
+
+      return responseStr;
+    }
+
+    // Initial Load Setup
+    renderMarkers(campusData, false);
+  </script>
+</body>
+</html>
