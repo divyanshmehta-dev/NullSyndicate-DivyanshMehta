@@ -2,6 +2,9 @@
 =======
 # VIT Bhopal:–Smart Campus Navigator🗺️
 
+## 🔗 Live Demo
+[null-syndicate-divyansh-mehta-yzcm.vercel.app](https://null-syndicate-divyansh-mehta-yzcm.vercel.app)
+
 An interactive, single-page website that helps students and visitors in the VIT Bhopal campus — find buildings, sports grounds, and amenities on a map, get walking times, and ask a built-in chatbot for directions.
 
 ## 🚀 Features:-
